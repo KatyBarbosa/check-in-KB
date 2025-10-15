@@ -35,7 +35,7 @@ body {
   width: 120px;
   border-radius: 50%;
   object-fit: cover;
-  margin-top: -6px;
+  margin-top: -4px;
 }
 .header-text { text-align: center; }
 .couple-names {
@@ -162,8 +162,11 @@ li.confirmado { background: #f2fdf2; color: #333; }
   font-weight: bold;
   color: #8BD24D;
   margin-bottom: 1rem;
+.mesa-icon {
+  width: 50px;
+  height: 50px;
+  filter: hue-rotate(60deg);
 }
-
 /* ======= FOOTER ======= */
 .footer {
   text-align: center;
@@ -190,10 +193,10 @@ li.confirmado { background: #f2fdf2; color: #333; }
   <button class="button-green" onclick="performSearch()">Buscar Convidado</button>
   <button class="button-gray" onclick="refreshData()">🔄 Atualizar Dados</button>
 
-  <h3>💚 Pendentes (aguardando check-in)</h3>
+  <h3>💚 Convidados (aguardando check-in)</h3>
   <ul id="pendingList"></ul>
 
-  <h3>🟢 Check-in Realizado</h3>
+  <h3>✅ Check-in Realizado</h3>
   <ul id="confirmedList"></ul>
 </div>
 
@@ -209,9 +212,11 @@ li.confirmado { background: #f2fdf2; color: #333; }
 <!-- TELA BRANCA DE RESUMO -->
 <div id="checkinConfirmation" class="checkin-overlay">
   <div class="confirmation-card">
-    <h2>✅ Check-in realizado!</h2>
+    <h2>✅ Check-in realizado com sucesso!</h2>
     <p id="confirmedName"></p>
+     <img src="mesa-icon.png" alt="Mesa" class="mesa-icon" />
     <div class="mesa-info" id="confirmedTable"></div>
+}
     <button class="button-green" onclick="newSearch()">Novo Check-in</button>
   </div>
 </div>
@@ -255,20 +260,49 @@ function updateGuestLists(){
 // Buscar convidado
 function normalize(str){ return str.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(); }
 function searchGuest(e){ if(e.key==='Enter') performSearch(); }
-function performSearch(){
+function performSearch() {
   const term = normalize(document.getElementById('searchInput').value);
-  const allLists = document.querySelectorAll('#pendingList li, #confirmedList li');
-  if(!term){ allLists.forEach(li=>li.style.display='flex'); return; }
-  allLists.forEach(li=>li.style.display='none');
-  guests.forEach(g=>{
-    if(normalize(g.nome).includes(term) || normalize(g.apelido).includes(term) || g.telefone.includes(term)){
-      const list = g.status==='confirmado' ? document.getElementById('confirmedList') : document.getElementById('pendingList');
-      Array.from(list.children).forEach(li=>{
-        if(li.textContent.includes(g.nome)) li.style.display='flex';
-      });
+  const pendingList = document.getElementById('pendingList');
+  const confirmedList = document.getElementById('confirmedList');
+
+  // limpa as listas antes da filtragem
+  pendingList.innerHTML = '';
+  confirmedList.innerHTML = '';
+
+  // se o campo estiver vazio, recarrega todas
+  if (!term) {
+    updateGuestLists();
+    return;
+  }
+
+  const filteredGuests = guests.filter(g =>
+    normalize(g.nome).includes(term) ||
+    normalize(g.apelido).includes(term) ||
+    g.telefone.includes(term)
+  );
+
+  filteredGuests.forEach(g => {
+    const item = document.createElement('li');
+    item.innerHTML = `<strong>${g.nome}</strong>${g.apelido ? ' (' + g.apelido + ')' : ''} - ${g.telefone}`;
+    if (g.status === 'confirmado') {
+      item.style.backgroundColor = '#DFF5E0';
+      confirmedList.appendChild(item);
+    } else {
+      item.style.backgroundColor = '#fff';
+      item.onclick = () => openConfirmationModal(g);
+      pendingList.appendChild(item);
     }
   });
+
+  if (filteredGuests.length === 0) {
+    const msg = document.createElement('li');
+    msg.textContent = 'Nenhum convidado encontrado.';
+    msg.style.textAlign = 'center';
+    msg.style.color = '#777';
+    pendingList.appendChild(msg);
+  }
 }
+
 
 // Modal
 function openConfirmationModal(guest){
@@ -319,3 +353,4 @@ document.getElementById('searchInput').focus();
 </script>
 </body>
 </html>
+
