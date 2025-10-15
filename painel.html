@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Painel - Check-in</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;padding:20px;max-width:900px;margin:0 auto;}
+    .card{border-radius:10px;padding:16px;margin:8px 0;border:1px solid #ddd;}
+    h1{margin-top:0;}
+    ul{padding-left:20px;}
+  </style>
+</head>
+<body>
+  <h1>Painel de Check-ins</h1>
+  <div id="stats" class="card">Carregando...</div>
+  <div id="last" class="card">Últimos confirmados: carregando...</div>
+
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwrw8bSoIjrTFDzZGJCU75AzX46Hrb4HXhK44vcunWV3nmGX4N5_KcDMuHU1f6WDFnn/exec'; // substitua
+const POLL_MS = 5000;
+
+async function fetchResumo(){
+  try{
+    const res = await fetch(SCRIPT_URL + '?action=resumo');
+    const data = await res.json();
+    renderResumo(data);
+  }catch(err){
+    document.getElementById('stats').innerText = 'Erro ao buscar resumo: ' + err.message;
+  }
+}
+
+function renderResumo(d){
+  if(!d || d.status !== 'ok'){ document.getElementById('stats').innerText = 'Erro no resumo'; return; }
+  const html = `
+    <div><strong>Total convidados:</strong> ${d.total}</div>
+    <div><strong>Check-ins realizados:</strong> ${d.checkins}</div>
+    <div><strong>Percentual de chegada:</strong> ${d.percent}%</div>
+  `;
+  document.getElementById('stats').innerHTML = html;
+  const last = d.last && d.last.length ? '<ol>' + d.last.map(n => `<li>${n}</li>`).join('') + '</ol>' : 'Nenhum ainda';
+  document.getElementById('last').innerHTML = `<strong>Últimos confirmados:</strong> ${last}`;
+}
+
+fetchResumo();
+setInterval(fetchResumo, POLL_MS);
+</script>
+</body>
+</html>

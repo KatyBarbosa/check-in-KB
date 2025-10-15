@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Check-in - Casamento</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;padding:20px;max-width:720px;margin:0 auto;}
+    input,button{padding:10px;font-size:16px;margin:6px 0;}
+    .result{border-radius:8px;padding:14px;margin-top:12px;}
+    .ok{background:#e6ffed;border:1px solid #3bb44a;color:#0b6b2d;}
+    .warn{background:#fff7e6;border:1px solid #e6a800;color:#8a5a00;}
+    .err{background:#ffecec;border:1px solid #e03939;color:#7a1414;}
+    .muted{color:#666;font-size:14px;}
+  </style>
+</head>
+<body>
+  <h2>Check-in de Convidados</h2>
+
+  <label for="q">Nome ou telefone</label><br/>
+  <input id="q" placeholder="Digite nome ou telefone" style="width:100%"/><br/>
+  <button id="buscar">Buscar</button>
+  <div id="loading" class="muted" style="display:none">Buscando...</div>
+
+  <div id="results"></div>
+
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwrw8bSoIjrTFDzZGJCU75AzX46Hrb4HXhK44vcunWV3nmGX4N5_KcDMuHU1f6WDFnn/exec'; // substitua
+
+document.getElementById('buscar').addEventListener('click', buscar);
+document.getElementById('q').addEventListener('keydown', (e)=>{ if(e.key==='Enter') buscar(); });
+
+async function buscar(){
+  const q = document.getElementById('q').value.trim();
+  if(!q){ alert('Digite nome ou telefone'); return; }
+  showLoading(true);
+  try{
+    const url = SCRIPT_URL + '?action=buscar&q=' + encodeURIComponent(q);
+    const res = await fetch(url);
+    const data = await res.json();
+    showLoading(false);
+    renderResults(data);
+  }catch(err){
+    showLoading(false);
+    showError('Erro na busca: ' + err.message);
+  }
+}
+
+function renderResults(data){
+  const box = document.getElementById('results');
+  box.innerHTML = '';
+  if(!data || data.count === 0){ box.innerHTML = `<div class="result err">❌ Convite inválido ou não encontrado.</div>`; return; }
+  // mostra primeiro resultado e botão confirmar
+  const r = data.results[0];
+  const html = `
+    <div>
+      <div class="muted">Nome</div>
+      <strong>${r.nome}</strong><br/>
+      <div class="muted">Telefone</div>
+      <div>${r.telefone}</div>
+      <div class="muted">Mesa</div>
+      <div>${r.mesa || '---'}</div>
+      <div class="muted">Status atual</div>
+      <div>${r.status || 'pendente'}</div>
+      <div style="margin-top:10px;">
+        <button id="confirm">Confirmar entrada</button>
+      </div>
+    </div>
+  `;
+  box.innerHTML = html;
+  document.getElementById('confirm').addEventListener('click', ()=>confirmar(r));
+}
+
+async function confirmar(item){
+  const q = document.getElementById('q').value.trim();
+  const payload = { q: q };
+  try{
+    const res = await fetch(SCRIPT_URL + '?action=checkin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    handleCheckinResponse(data);
+  }catch(err){
+    showError('Erro ao confirmar: ' + err.message);
+  }
+}
+
+function handleCheckinResponse(data){
+  const box = document.getElementById('results');
+  if(!data) { box.innerHTML = `<div class="result err">Erro desconhecido.</div>`; return; }
+  if(data.status === 'ok'){
+    box.innerHTML = `<div class="result ok">✅ Convidado confirmado!<br><strong>Nome:</strong> ${data.nome}<br><strong>Mesa:</strong> ${data.mesa || '---'}</div>`;
+    document.getElementById('q').value = '';
+    return;
+  }
+  if(data.status === 'already'){
+    box.innerHTML = `<div class="result warn">⚠️ Convidado já fez check-in.<br><strong>Nome:</strong> ${data.nome}<br><strong>Mesa:</strong> ${data.mesa || '---'}</div>`;
+    return;
+  }
+  if(data.status === 'not_found'){
+    box.innerHTML = `<div class="result err">❌ Convite inválido ou não encontrado.</div>`;
+    return;
+  }
+  box.innerHTML = `<div class="result err">Erro: ${data.message || 'desconhecido'}</div>`;
+}
+
+function showLoading(v){ document.getElementById('loading').style.display = v ? 'block' : 'none'; }
+function showError(msg){ document.getElementById('results').innerHTML = `<div class="result err">${msg}</div>`; }
+</script>
+</body>
+</html>
