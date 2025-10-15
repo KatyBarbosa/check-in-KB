@@ -140,7 +140,7 @@ function updateGuestLists(){
   guests.forEach(g=>{
     const item = document.createElement('li');
     item.className='p-3 rounded-xl border mb-1';
-    item.innerHTML = `<strong>${g.nome}</strong> (${g.apelido}) - ${g.telefone} • <span class="highlight">${g.mesa}</span>`;
+    item.innerHTML = `<strong>${g.nome}</strong>${g.apelido ? ' (' + g.apelido + ')' : ''} - ${g.telefone} • <span class="highlight">${g.mesa}</span>`;
     if(g.status==='confirmado'){
       item.style.backgroundColor='#DFF5E0';
       confirmed.appendChild(item);
@@ -160,7 +160,13 @@ function performSearch(){
   guests.forEach(g=>{
     const allLists = document.querySelectorAll('#pendingList li, #confirmedList li');
     allLists.forEach(li=>li.style.display='none');
-    if(g.nome.toLowerCase().includes(term) || g.apelido.toLowerCase().includes(term) || g.telefone.includes(term)){
+   const normalize = str => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+if (
+  normalize(g.nome).includes(normalize(term)) ||
+  normalize(g.apelido).includes(normalize(term)) ||
+  g.telefone.includes(term)
+) {
+
       const list = g.status==='confirmado'? document.getElementById('confirmedList') : document.getElementById('pendingList');
       Array.from(list.children).forEach(li=>{
         if(li.textContent.includes(g.nome)) li.style.display='block';
@@ -216,6 +222,7 @@ document.getElementById('searchInput').focus();
 
 </body>
 </html>
+
 
 
 
