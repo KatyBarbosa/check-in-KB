@@ -3,91 +3,174 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Check-in KB</title>
+<title>Check-in Casamento Jackeline & Samarthony</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22><path fill=%22%238BD24D%22 d=%22M8 14s6-4.35 6-8.5S10.75 1 8 4.5 2 5.5 2 5.5 2 9.65 8 14z%22/></svg>">
+<script src="https://cdn.tailwindcss.com"></script>
 <style>
-body{font-family:"Poppins",sans-serif;background:#fafafa;text-align:center;padding:20px;}
-.container{max-width:500px;margin:0 auto;background:#fff;border-radius:20px;box-shadow:0 4px 15px rgba(0,0,0,0.1);padding:30px;}
-input,button{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #ccc;font-size:16px;}
-button{background:#a87e6e;color:#fff;cursor:pointer;transition:0.3s;}
-button:hover{background:#8b6659;}
-.alert{margin-top:15px;padding:15px;border-radius:8px;font-weight:600;}
-.success{background:#d4edda;color:#155724;}
-.warning{background:#fff3cd;color:#856404;}
-.error{background:#f8d7da;color:#721c24;}
+body { font-family:sans-serif; margin:0; background:#fff; color:#333; }
+.header { background-color:#8BD24D; color:white; padding:1.5rem; border-bottom:4px solid #fff; text-align:center; }
+.header img { max-height:80px; margin-bottom:0.5rem; }
+.fade-in { animation: fadeIn 0.5s ease-in; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(20px);} to { opacity:1; transform:translateY(0);} }
+.pulse-success { animation: pulseSuccess 1.5s ease-in-out; }
+@keyframes pulseSuccess { 0%{transform:scale(1);}50%{transform:scale(1.05);background-color:#8BD24D;}100%{transform:scale(1);} }
+.highlight { font-weight:bold; font-size:1.25rem; color:#8BD24D; }
+.footer { text-align:center; padding:1rem; font-size:0.9rem; background:#f0f0f0; margin-top:2rem; }
+.button-green { background-color:#8BD24D; color:white; padding:0.75rem 1rem; border-radius:0.75rem; font-weight:bold; cursor:pointer; transition:0.3s; }
+.button-green:hover { background-color:#76b441; }
+.button-gray { background-color:#ccc; color:#333; padding:0.5rem 1rem; border-radius:0.75rem; cursor:pointer; }
+.hidden { display:none; }
+input { padding:0.75rem; border-radius:0.75rem; border:2px solid #ccc; width:100%; margin-bottom:0.5rem; }
 </style>
 </head>
 <body>
-<div>
-<img src="monograma.png" alt="Monograma J & S" style="width:120px;margin-bottom:10px;">
-<h2>Casamento Jackline e Samarthony</h2>
-<p style="color:#777;font-size:14px;">06 de Dezembro de 2025 • Du Eventos</p>
+
+<!-- Cabeçalho -->
+<div class="header">
+  <img src="monograma.png" alt="Monograma Jackeline & Samarthony" />
+  <div class="text-lg font-bold">Jackeline & Samarthony</div>
+  <div class="text-sm">06/12/2025 - Du Eventos</div>
 </div>
 
-<div class="container">
-<input type="text" id="busca" placeholder="Digite nome ou telefone do convidado">
-<button onclick="buscarConvidado()">Buscar</button>
-<div id="resultado"></div>
-<div id="mensagem"></div>
+<!-- Contadores -->
+<div class="max-w-xl mx-auto mt-6 text-center">
+  <div class="flex justify-between mb-4">
+    <div>Chegaram: <span id="checkedInCount">0</span></div>
+    <div>Total: <span id="totalGuests">0</span></div>
+    <div>Pendentes: <span id="pendingCount">0</span></div>
+  </div>
 </div>
 
-<footer>© 2025 Casamento Jackline e Samarthony • Check-in by Katiene Barbosa</footer>
+<!-- Seção de busca -->
+<div class="max-w-xl mx-auto bg-white p-6 rounded-xl shadow-md">
+  <input type="text" id="searchInput" placeholder="Digite nome, apelido ou telefone" onkeyup="searchGuest(event)">
+  <button class="button-green w-full mb-2" onclick="performSearch()">Buscar Convidado</button>
+  <button class="button-gray w-full mb-2" onclick="refreshData()">🔄 Atualizar Dados</button>
+  <div id="searchResults" class="mt-4 hidden"></div>
+</div>
+
+<!-- Modal de confirmação -->
+<div id="confirmationModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white p-6 rounded-xl max-w-sm text-center">
+    <p id="modalMessage" class="mb-4 font-semibold"></p>
+    <div class="flex justify-around">
+      <button class="button-green" onclick="confirmCheckin()">Confirmar</button>
+      <button class="button-gray" onclick="cancelCheckin()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Tela de check-in confirmado -->
+<div id="checkinConfirmation" class="hidden max-w-xl mx-auto mt-6 p-6 bg-white rounded-xl shadow-md fade-in text-center">
+  <h2 class="text-2xl mb-2">✅ Check-in realizado!</h2>
+  <p id="confirmedName" class="mb-2 font-semibold"></p>
+  <p id="confirmedTable" class="highlight mb-4"></p>
+  <button class="button-gray" onclick="newSearch()">Novo Check-in</button>
+</div>
+
+<!-- Rodapé -->
+<div class="footer">
+  Criado por Katiene Barbosa
+</div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby4I_hY9fZ7y0q31QO6p65WsUGDeR64VyL1VKTrFAshT-co2vfJfXr_fk0RL_tBtj2-/exec";
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxZNCEoXg4iX7_WlEoQpl5gxPO-_CLnGpP6uB_hqUxf1wi_nSlXcZQ_TbEvBfWmG5XK/exec';
+let guests=[], checkedInGuests=0, isOnline=false, selectedGuest=null;
 
-async function buscarConvidado(){
-  const busca = document.getElementById("busca").value.trim();
-  const msg = document.getElementById("mensagem");
-  const resDiv = document.getElementById("resultado");
-  msg.innerHTML=""; resDiv.innerHTML="";
-
-  if(!busca){ msg.innerHTML=`<div class="alert error">❌ Digite nome ou telefone.</div>`; return; }
-
+// Carregar convidados
+async function loadGuestsFromSheets(){
   try{
-    const response = await fetch(`${SCRIPT_URL}?action=buscar&query=${encodeURIComponent(busca)}`);
-    const data = await response.json();
-
-    if(data.status==="ok" && data.results.length>0){
-      const convidado = data.results[0];
-      const jaCheckin = (convidado.status.toLowerCase()==="checkin" || convidado.status.toLowerCase()==="chegado");
-      resDiv.innerHTML=`
-        <p><strong>Nome:</strong> ${convidado.nome}<br>
-        <strong>Mesa:</strong> ${convidado.mesa}<br>
-        <strong>Status:</strong> ${convidado.status}</p>
-        <button ${jaCheckin?'disabled style="background:#ccc; cursor:not-allowed;"':''} 
-          onclick="confirmarEntrada('${convidado.nome}','${convidado.telefone}','${convidado.mesa}')">
-          ${jaCheckin?'✅ Já confirmado':'Confirmar entrada'}
-        </button>`;
-      if(jaCheckin) msg.innerHTML=`<div class="alert warning">⚠️ Convidado já fez check-in.</div>`;
-    } else {
-      msg.innerHTML=`<div class="alert error">❌ Convite inválido ou não encontrado.</div>`;
-    }
-  }catch(err){ msg.innerHTML=`<div class="alert error">❌ Erro ao buscar convidado.</div>`; }
+    const res = await fetch(`${APPS_SCRIPT_URL}?action=getGuests`);
+    const data = await res.json();
+    if(data.success){
+      guests=data.guests;
+      checkedInGuests = guests.filter(g=>g.status==='confirmado').length;
+      updateCounters();
+      isOnline=true;
+    }else throw new Error(data.error);
+  }catch(e){
+    console.error(e);
+    guests=[];
+    isOnline=false;
+  }
 }
 
-async function confirmarEntrada(nome, telefone, mesa){
-  const msg=document.getElementById("mensagem");
-  const confirmar = confirm(`Confirmar entrada de:\n${nome}\nMesa: ${mesa}?`);
-  if(!confirmar) return;
-
-  try{
-    const response = await fetch(SCRIPT_URL,{
-      method:"POST",
-      body:JSON.stringify({action:"checkin", nome, telefone}),
-      headers:{"Content-Type":"application/json"}
-    });
-    const data = await response.json();
-
-    if(data.status==="ok"){
-      msg.innerHTML=`<div class="alert success">✅ Convidado confirmado!<br><strong>${data.nome}</strong><br>Mesa: ${data.mesa}</div>`;
-      buscarConvidado();
-    } else if(data.status==="already"){
-      msg.innerHTML=`<div class="alert warning">⚠️ Convidado já fez check-in.</div>`;
-    } else {
-      msg.innerHTML=`<div class="alert error">❌ Erro: ${data.message || "Falha ao registrar."}</div>`;
-    }
-  }catch(err){ msg.innerHTML=`<div class="alert error">❌ Erro na conexão.</div>`; }
+function updateCounters(){
+  document.getElementById('checkedInCount').textContent=checkedInGuests;
+  document.getElementById('totalGuests').textContent=guests.length;
+  document.getElementById('pendingCount').textContent=guests.length-checkedInGuests;
 }
+
+// Busca
+function searchGuest(event){ if(event.key==='Enter') performSearch(); }
+function performSearch(){
+  const term=document.getElementById('searchInput').value.toLowerCase();
+  const div=document.getElementById('searchResults');
+  div.innerHTML='';
+  if(!term){ div.innerHTML='<p>Digite nome, apelido ou telefone</p>'; div.classList.remove('hidden'); return;}
+  const results=guests.filter(g=>g.nome.toLowerCase().includes(term)||g.apelido.toLowerCase().includes(term)||g.telefone.includes(term));
+  if(results.length===0){ div.innerHTML='<p>Nenhum convidado encontrado</p>'; div.classList.remove('hidden'); return;}
+  results.forEach(g=>{
+    const btn=document.createElement('button');
+    btn.className='button-gray w-full mb-1 text-left';
+    btn.textContent=`${g.nome} (${g.apelido}) - ${g.telefone}`;
+    btn.onclick=()=>openConfirmationModal(g);
+    if(g.status==='confirmado') btn.style.backgroundColor='#8BD24D';
+    div.appendChild(btn);
+  });
+  div.classList.remove('hidden');
+}
+
+// Modal
+function openConfirmationModal(guest){
+  if(guest.status==='confirmado'){ alert('Convidado já fez check-in!'); return;}
+  selectedGuest=guest;
+  document.getElementById('modalMessage').textContent=`Confirmar check-in para: ${guest.nome} (${guest.apelido})\nMesa: ${guest.mesa}`;
+  document.getElementById('confirmationModal').classList.remove('hidden');
+}
+
+async function confirmCheckin(){
+  if(!selectedGuest) return;
+  selectedGuest.status='confirmado';
+  try{
+    if(isOnline){
+      await fetch(APPS_SCRIPT_URL,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({action:'checkin', guestId:selectedGuest.id, timestamp:new Date().toISOString()})
+      });
+    }
+  }catch(e){ console.error(e); }
+  showCheckinConfirmation(selectedGuest);
+  document.getElementById('confirmationModal').classList.add('hidden');
+}
+
+function cancelCheckin(){ selectedGuest=null; document.getElementById('confirmationModal').classList.add('hidden'); }
+function showCheckinConfirmation(guest){
+  checkedInGuests++;
+  updateCounters();
+  document.getElementById('confirmedName').textContent=guest.nome;
+  document.getElementById('confirmedTable').textContent='Mesa: '+guest.mesa;
+  const div=document.getElementById('checkinConfirmation');
+  div.classList.remove('hidden');
+  div.classList.add('pulse-success');
+}
+function newSearch(){
+  document.getElementById('searchInput').value='';
+  document.getElementById('searchResults').innerHTML='';
+  document.getElementById('searchResults').classList.add('hidden');
+  document.getElementById('checkinConfirmation').classList.add('hidden');
+  document.getElementById('checkinConfirmation').classList.remove('pulse-success');
+  selectedGuest=null;
+  document.getElementById('searchInput').focus();
+}
+
+// Inicializar
+loadGuestsFromSheets();
+updateCounters();
+document.getElementById('searchInput').focus();
+
+async function refreshData(){ await loadGuestsFromSheets(); alert('Dados atualizados!'); }
 </script>
 </body>
 </html>
