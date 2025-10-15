@@ -54,7 +54,6 @@
 </head>
 <body>
 
-  <!-- Cabeçalho -->
   <div>
     <img src="monograma.png" alt="Monograma J & S" style="width:120px; margin-bottom:10px;">
     <h2>Casamento Jackline e Samarthony</h2>
@@ -62,22 +61,19 @@
   </div>
 
   <div class="container">
-    <!-- Campo de busca -->
     <input type="text" id="busca" placeholder="Digite nome ou telefone do convidado">
     <button onclick="buscarConvidado()">Buscar</button>
 
-    <!-- Resultado -->
     <div id="resultado"></div>
     <div id="mensagem"></div>
   </div>
 
-  <!-- Rodapé -->
   <footer>
-    © 2025 Casamento Jackline e Samarthony•  Check-in by Katiene Barbosa
+    © 2025 Casamento Jackline e Samarthony • Check-in by Katiene Barbosa
   </footer>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwMsPYKVzW7smOSiGLMspQ-7sx3exgF3s-pbwBvoCHz7cKdvKbKvNKSvRsXvt29lVNT/exec"; // substitua pelo link do Apps Script
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwMsPYKVzW7smOSiGLMspQ-7sx3exgF3s-pbwBvoCHz7cKdvKbKvNKSvRsXvt29lVNT/exec"; // seu Apps Script
 
     async function buscarConvidado() {
       const busca = document.getElementById("busca").value.trim();
@@ -96,8 +92,8 @@
         const response = await fetch(`${SCRIPT_URL}?action=buscar&query=${encodeURIComponent(busca)}`);
         const data = await response.json();
 
-        if (data.status === "ok" && data.resultados.length > 0) {
-          const convidado = data.resultados[0];
+        if (data.status === "ok" && data.results.length > 0) {
+          const convidado = data.results[0];
           resDiv.innerHTML = `
             <p><strong>Nome:</strong> ${convidado.nome}<br>
             <strong>Mesa:</strong> ${convidado.mesa}<br>
@@ -108,7 +104,7 @@
           msg.innerHTML = `<div class="alert error">❌ Convite inválido ou não encontrado.</div>`;
         }
       } catch (err) {
-        msg.innerHTML = `<div class="alert error">Erro ao buscar convidado.</div>`;
+        msg.innerHTML = `<div class="alert error">❌ Erro ao buscar convidado.</div>`;
       }
     }
 
@@ -132,10 +128,10 @@
 
         if (data.status === "ok") {
           msg.innerHTML = `<div class="alert success">✅ Convidado confirmado!<br><strong>${data.nome}</strong><br>Mesa: ${data.mesa}</div>`;
-        } else if (data.status === "ja_confirmado") {
+        } else if (data.status === "already") {
           msg.innerHTML = `<div class="alert warning">⚠️ Convidado já fez check-in.</div>`;
         } else {
-          msg.innerHTML = `<div class="alert error">❌ Erro: ${data.mensagem || "Falha ao registrar."}</div>`;
+          msg.innerHTML = `<div class="alert error">❌ Erro: ${data.message || "Falha ao registrar."}</div>`;
         }
       } catch (err) {
         msg.innerHTML = `<div class="alert error">❌ Erro na conexão.</div>`;
@@ -145,5 +141,3 @@
 
 </body>
 </html>
-
-
