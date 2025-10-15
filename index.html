@@ -132,7 +132,6 @@ li:hover{background:#f0f0f0;}
   </div>
 </div>
 
-
 <!-- 🔹 TELA DE CHECK-IN CONFIRMADO -->
 <div id="checkinConfirmation" class="hidden checkin-overlay">
   <div class="confirmation-card fade-in">
@@ -145,6 +144,111 @@ li:hover{background:#f0f0f0;}
     <button class="button-green mt-4" onclick="newSearch()">Novo Check-in</button>
   </div>
 </div>
+
+<style>
+/* 🔹 MODAL ESCURO DE CONFIRMAÇÃO */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-overlay.active { display: flex; }
+.modal-box {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 2rem;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  animation: slideUp 0.4s ease-out;
+}
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* 🔹 TELA BRANCA DE CONFIRMAÇÃO FINAL */
+.checkin-overlay {
+  position: fixed;
+  inset: 0;
+  background: #ffffff;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+}
+.checkin-overlay.active { display: flex; }
+.confirmation-card {
+  text-align: center;
+}
+.confirmation-card h2 {
+  font-size: 2rem;
+  color: #8BD24D;
+  margin-bottom: 0.5rem;
+}
+.confirmation-card p {
+  margin: 0.5rem 0;
+}
+.mesa-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+.mesa-icon {
+  width: 50px;
+  height: 50px;
+  filter: hue-rotate(60deg);
+}
+.highlight {
+  font-size: 2rem;
+  color: #8BD24D;
+  font-weight: bold;
+}
+<script>
+// 🔹 ABRIR MODAL DE CONFIRMAÇÃO
+function openConfirmationModal(guest) {
+  selectedGuest = guest;
+  document.getElementById('modalMessage').textContent =
+    `Confirmar check-in de ${guest.nome}? Mesa ${guest.mesa}`;
+  document.getElementById('confirmationModal').classList.add('active');
+}
+
+// 🔹 CANCELAR CHECK-IN (fecha modal)
+function cancelCheckin() {
+  selectedGuest = null;
+  document.getElementById('confirmationModal').classList.remove('active');
+}
+
+// 🔹 CONFIRMAR CHECK-IN
+async function confirmCheckin() {
+  if (!selectedGuest) return;
+  try {
+    const payload = {
+      action: 'checkin',
+      guestId: selectedGuest.id,
+      timestamp: new Date().toISOString()
+    };
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.sucesso) {
+      selectedGuest.status = 'confirmado';
+      updateGuestLists();
+      showCheckinConfirmation(selectedGuest);
+    } else {
+      alert(data.erro || 'Erro ao confirmar check-in.');
+    }
+  } catch (e) {
+
 
 <div class="footer">Criado por Katiene Barbosa</div>
 
@@ -242,6 +346,7 @@ document.getElementById('searchInput').focus();
 </script>
 </body>
 </html>
+
 
 
 
