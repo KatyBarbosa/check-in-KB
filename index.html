@@ -21,6 +21,8 @@ body { font-family:sans-serif; margin:0; background:#fff; color:#333; }
 .button-gray { background-color:#ccc; color:#333; padding:0.5rem 1rem; border-radius:0.75rem; cursor:pointer; }
 .hidden { display:none; }
 input { padding:0.75rem; border-radius:0.75rem; border:2px solid #ccc; width:100%; margin-bottom:0.5rem; }
+ul { list-style:none; padding:0; margin:0; }
+li { cursor:pointer; }
 </style>
 </head>
 <body>
@@ -31,19 +33,16 @@ input { padding:0.75rem; border-radius:0.75rem; border:2px solid #ccc; width:100
   <div class="text-sm">06/12/2025 - Du Eventos</div>
 </div>
 
-<div class="max-w-xl mx-auto mt-6 text-center">
-  <div class="flex justify-between mb-4">
-    <div>Chegaram: <span id="checkedInCount">0</span></div>
-    <div>Total: <span id="totalGuests">0</span></div>
-    <div>Pendentes: <span id="pendingCount">0</span></div>
-  </div>
-</div>
-
-<div class="max-w-xl mx-auto bg-white p-6 rounded-xl shadow-md">
+<div class="max-w-xl mx-auto mt-6 bg-white p-6 rounded-xl shadow-md">
   <input type="text" id="searchInput" placeholder="Digite nome, apelido ou telefone" onkeyup="searchGuest(event)">
   <button class="button-green w-full mb-2" onclick="performSearch()">Buscar Convidado</button>
   <button class="button-gray w-full mb-2" onclick="refreshData()">🔄 Atualizar Dados</button>
-  <div id="searchResults" class="mt-4 hidden"></div>
+
+  <h3 class="font-bold mt-4 mb-2">⏳ Convidados Pendentes</h3>
+  <ul id="pendingList" class="space-y-2"></ul>
+
+  <h3 class="font-bold mt-4 mb-2">✅ Convidados Confirmados</h3>
+  <ul id="confirmedList" class="space-y-2"></ul>
 </div>
 
 <!-- Modal de Confirmação -->
@@ -70,63 +69,65 @@ input { padding:0.75rem; border-radius:0.75rem; border:2px solid #ccc; width:100
 </div>
 
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzztcB7qdvZRfAVz3w-VuSyCfBSbmUYwll5bJ1iyYCZ5EoB9eIrc6f9_b7ZyG48lYp9/exec';
-let guests=[], checkedInGuests=0, selectedGuest=null;
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxD6XpmlV52Jci_udnwqwdqUIXLHY7MvG5s2srloHYF8GCqgBeaJDSnrppF7jbcwaiM/exec';
+let guests=[], selectedGuest=null;
 
-// Carrega convidados
 async function loadGuestsFromSheets(){
   try{
     const res = await fetch(`${APPS_SCRIPT_URL}?action=getGuests`);
     const data = await res.json();
     if(data.success){
       guests = data.guests;
-      checkedInGuests = guests.filter(g=>g.status==='confirmado').length;
-      updateCounters();
+      updateGuestLists();
     }
   }catch(e){console.error(e);}
 }
 
-// Atualiza contadores
-function updateCounters(){
-  document.getElementById('checkedInCount').textContent = checkedInGuests;
-  document.getElementById('totalGuests').textContent = guests.length;
-  document.getElementById('pendingCount').textContent = guests.length - checkedInGuests;
+function updateGuestLists(){
+  const confirmed = document.getElementById('confirmedList');
+  const pending = document.getElementById('pendingList');
+  confirmed.innerHTML = '';
+  pending.innerHTML = '';
+  guests.forEach(g=>{
+    const item = document.createElement('li');
+    item.className='p-3 rounded-xl border mb-1';
+    item.innerHTML = `<strong>${g.nome}</strong> (${g.apelido}) - ${g.telefone} • <span class="highlight">${g.mesa}</span>`;
+    if(g.status==='confirmado'){
+      item.style.backgroundColor='#DFF5E0';
+      confirmed.appendChild(item);
+    } else {
+      item.style.backgroundColor='#fff';
+      item.onclick = ()=>openConfirmationModal(g);
+      pending.appendChild(item);
+    }
+  });
 }
 
-// Busca ao pressionar Enter
 function searchGuest(e){ if(e.key==='Enter') performSearch(); }
 
-// Realiza busca
 function performSearch(){
   const term = document.getElementById('searchInput').value.toLowerCase();
-  const div = document.getElementById('searchResults');
-  div.innerHTML=''; div.classList.add('hidden');
-  if(!term){ div.innerHTML='<p>Digite nome, apelido ou telefone</p>'; div.classList.remove('hidden'); return;}
-  const results = guests.filter(g=> g.nome.toLowerCase().includes(term) || g.apelido.toLowerCase().includes(term) || g.telefone.includes(term));
-  if(results.length===0){ div.innerHTML='<p>Nenhum convidado encontrado</p>'; div.classList.remove('hidden'); return;}
-  results.forEach(g=>{
-    const btn=document.createElement('button');
-    btn.className='button-gray w-full mb-1 text-left';
-    btn.textContent=`${g.nome} (${g.apelido}) - ${g.telefone}`;
-    if(g.status==='confirmado') btn.style.backgroundColor='#8BD24D';
-    btn.onclick=()=>openConfirmationModal(g);
-    div.appendChild(btn);
+  if(!term){ updateGuestLists(); return; }
+  guests.forEach(g=>{
+    const allLists = document.querySelectorAll('#pendingList li, #confirmedList li');
+    allLists.forEach(li=>li.style.display='none');
+    if(g.nome.toLowerCase().includes(term) || g.apelido.toLowerCase().includes(term) || g.telefone.includes(term)){
+      const list = g.status==='confirmado'? document.getElementById('confirmedList') : document.getElementById('pendingList');
+      Array.from(list.children).forEach(li=>{
+        if(li.textContent.includes(g.nome)) li.style.display='block';
+      });
+    }
   });
-  div.classList.remove('hidden');
 }
 
-// Abre modal de confirmação
 function openConfirmationModal(guest){
-  if(guest.status==='confirmado'){ alert('Check-in já realizado!'); return; }
   selectedGuest = guest;
   document.getElementById('modalMessage').textContent = `Confirmar check-in de ${guest.nome} (${guest.mesa})?`;
   document.getElementById('confirmationModal').classList.remove('hidden');
 }
 
-// Cancelar
 function cancelCheckin(){ selectedGuest=null; document.getElementById('confirmationModal').classList.add('hidden'); }
 
-// Confirmar
 async function confirmCheckin(){
   if(!selectedGuest) return;
   try{
@@ -135,15 +136,13 @@ async function confirmCheckin(){
     const data = await res.json();
     if(data.success){
       selectedGuest.status='confirmado';
-      checkedInGuests++;
-      updateCounters();
+      updateGuestLists();
       showCheckinConfirmation(selectedGuest);
     }else{ alert(data.error); }
   }catch(e){console.error(e);}
   cancelCheckin();
 }
 
-// Mostra check-in confirmado
 function showCheckinConfirmation(guest){
   document.getElementById('confirmedName').textContent = guest.nome;
   document.getElementById('confirmedTable').textContent = guest.mesa;
@@ -151,21 +150,18 @@ function showCheckinConfirmation(guest){
   document.getElementById('checkinConfirmation').classList.add('pulse-success');
 }
 
-// Novo check-in
 function newSearch(){
   selectedGuest=null;
   document.getElementById('searchInput').value='';
-  document.getElementById('searchResults').innerHTML=''; document.getElementById('searchResults').classList.add('hidden');
-  document.getElementById('checkinConfirmation').classList.add('hidden'); document.getElementById('checkinConfirmation').classList.remove('pulse-success');
+  document.getElementById('checkinConfirmation').classList.add('hidden'); 
+  document.getElementById('checkinConfirmation').classList.remove('pulse-success');
+  updateGuestLists();
   document.getElementById('searchInput').focus();
 }
 
-// Atualizar dados
 async function refreshData(){ await loadGuestsFromSheets(); alert('Dados atualizados!'); }
 
-// Inicialização
 loadGuestsFromSheets();
-updateCounters();
 document.getElementById('searchInput').focus();
 </script>
 
