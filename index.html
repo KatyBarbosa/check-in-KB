@@ -162,7 +162,8 @@ li.confirmado { background: #f2fdf2; color: #333; }
   font-weight: bold;
   color: #8BD24D;
   margin-bottom: 1rem;
-.mesa-icon {
+}
+  .mesa-icon {
   width: 50px;
   height: 50px;
   filter: hue-rotate(60deg);
@@ -233,7 +234,7 @@ async function loadGuestsFromSheets(){
     const res = await fetch(`${APPS_SCRIPT_URL}?action=getGuests`);
     const data = await res.json();
     if(data.sucesso){
-      guests = data.convidados.map(g => ({...g, checkedIn: g.status === 'confirmado'}));
+      guests = data.guests.map(g => ({...g, checkedIn: g.status === 'confirmado'}));
       updateGuestLists();
     } else { alert('Erro: ' + data.erro); }
   } catch(e){ console.error(e); alert('Erro ao carregar convidados'); }
@@ -353,4 +354,5 @@ document.getElementById('searchInput').focus();
 </script>
 </body>
 </html>
+
 
