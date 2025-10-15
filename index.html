@@ -64,15 +64,26 @@ input{padding:0.75rem;border-radius:0.75rem;border:2px solid #ccc;width:100%;mar
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxD6XpmlV52Jci_udnwqwdqUIXLHY7MvG5s2srloHYF8GCqgBeaJDSnrppF7jbcwaiM/exec';
 let guests=[], selectedGuest=null;
 
-async function loadGuestsFromSheets(){
-  try{
+async function loadGuestsFromSheets() {
+  try {
     const res = await fetch(`${APPS_SCRIPT_URL}?action=getGuests`);
     const data = await res.json();
-    if(data.sucesso){
-      guests = data.convidados.map(g => ({...g, checkedIn: g.status==='confirmado'}));
-      updateGuestList();
-    } else { alert('Erro: ' + data.erro); }
-  }catch(e){ console.error(e); alert('Erro ao carregar convidados'); }
+    console.log('🔍 Retorno do GAS:', data);
+
+    if (data.success) {
+      guests = data.guests.map(g => ({
+        ...g,
+        checkedIn: g.status === 'confirmado'
+      }));
+      updateGuestLists();
+    } else {
+      alert('Erro: ' + (data.error || 'Retorno inesperado do servidor.'));
+    }
+
+  } catch (e) {
+    console.error('❌ Erro ao carregar convidados:', e);
+    alert('Erro ao conectar com o servidor.');
+  }
 }
 
 function updateGuestList(filteredGuests){
@@ -137,3 +148,4 @@ document.getElementById('searchInput').focus();
 
 </body>
 </html>
+
