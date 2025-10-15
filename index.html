@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Check-in - J & S</title>
-<link rel="icon" href="favicon.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
@@ -18,25 +17,25 @@ body {
 /* ======= CABEÇALHO ======= */
 .header {
   background-color: #ffffff;
-  color: #8bd24d;
-  padding: 0.5rem 1.2rem;
+  color: #8BD24D;
+  padding: 0.8rem 1rem;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 .header-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
   gap: 1rem;
+  flex-wrap: wrap;
   max-width: 700px;
   margin: 0 auto;
 }
 .logo {
-  height: 160px;
-  width: auto;
+  height: 120px;
+  width: 120px;
   border-radius: 50%;
   object-fit: cover;
-  margin-top: -10px; /* sobe um pouco o monograma */
+  margin-top: -6px;
 }
 .header-text { text-align: center; }
 .couple-names {
@@ -46,60 +45,80 @@ body {
   line-height: 1.2;
 }
 .event-info {
-  font-family: 'Open Sans', sans-serif;
   font-size: 0.9rem;
   margin-top: 0.3rem;
-  letter-spacing: 0.5px;
 }
 @media(max-width:600px){
-  .header-container { flex-direction: column; }
-  .couple-names { font-size: 1.8rem; }
-  .logo { height: 100px; margin-top: 0; }
+  .logo { height: 90px; width: 90px; margin-top: 0; }
+  .couple-names { font-size: 1.6rem; }
+  .header-container { gap: 0.5rem; }
 }
 
 /* ======= GERAL ======= */
-.fade-in { animation: fadeIn 1s ease-in; }
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+.container {
+  max-width: 700px;
+  margin: 1rem auto;
+  background: #fff;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
-.highlight { font-weight: bold; font-size: 1.25rem; color: #8BD24D; }
-.footer { text-align: center; padding: 1rem; font-size: 0.9rem; background: #f0f0f0; margin-top: 2rem; }
+@media(max-width:600px){
+  .container { margin: 0.8rem; padding: 0.8rem; }
+}
 
+input {
+  width: 100%;
+  padding: 0.9rem;
+  border-radius: 0.75rem;
+  border: 2px solid #ccc;
+  font-size: 1rem;
+  margin-bottom: 0.8rem;
+}
+
+.button-green, .button-gray {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 0.75rem;
+  padding: 0.9rem;
+  margin-bottom: 0.8rem;
+  font-size: 1rem;
+}
 .button-green {
   background-color: #8BD24D;
   color: white;
-  padding: 0.75rem 1rem;
-  border-radius: 0.75rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
 }
 .button-green:hover { background-color: #76b441; }
-
 .button-gray {
   background-color: #ccc;
   color: #333;
-  padding: 0.5rem 1rem;
-  border-radius: 0.75rem;
-  cursor: pointer;
+}
+.button-gray:hover { background-color: #bbb; }
+
+h3 {
+  margin-top: 1.5rem;
+  font-size: 1.1rem;
+  border-bottom: 2px solid #e5e5e5;
+  padding-bottom: 0.3rem;
 }
 
-.hidden { display: none; }
-
-input {
-  padding: 0.75rem;
-  border-radius: 0.75rem;
-  border: 2px solid #ccc;
-  width: 100%;
-  margin-bottom: 0.5rem;
-}
-
+/* ======= LISTAS ======= */
 ul { list-style: none; padding: 0; margin: 0; }
-li { cursor: pointer; padding: 0.5rem; border-radius: 0.5rem; }
-li:hover { background: #f0f0f0; }
+li {
+  cursor: pointer;
+  padding: 0.8rem;
+  border-bottom: 1px solid #e5e5e5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+li:last-child { border-bottom: none; }
+li:hover { background: #f9f9f9; transition: 0.2s; }
+li.confirmado { background: #f2fdf2; color: #333; }
 
-/* ======= MODAL ESCURO ======= */
+/* ======= MODAL ======= */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -113,19 +132,15 @@ li:hover { background: #f0f0f0; }
 .modal-box {
   background: #fff;
   border-radius: 1rem;
-  padding: 2rem;
+  padding: 1.8rem;
   text-align: center;
-  max-width: 400px;
+  max-width: 350px;
   width: 90%;
   box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-  animation: slideUp 0.4s ease-out;
 }
-@keyframes slideUp {
-  from { transform: translateY(40px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
+.modal-box p { font-size: 1rem; margin-bottom: 1rem; }
 
-/* ======= TELA BRANCA DE CONFIRMAÇÃO ======= */
+/* ======= CHECK-IN CONFIRMADO ======= */
 .checkin-overlay {
   position: fixed;
   inset: 0;
@@ -134,32 +149,27 @@ li:hover { background: #f0f0f0; }
   align-items: center;
   justify-content: center;
   z-index: 1100;
-}
-.checkin-overlay.active { display: flex; }
-.confirmation-card {
   text-align: center;
 }
+.checkin-overlay.active { display: flex; }
 .confirmation-card h2 {
-  font-size: 2rem;
+  font-size: 1.8rem;
   color: #8BD24D;
-  margin-bottom: 0.5rem;
 }
+.confirmation-card p { font-size: 1.2rem; margin: 1rem 0; }
 .mesa-info {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  margin: 1rem 0;
-}
-.mesa-icon {
-  width: 50px;
-  height: 50px;
-  filter: hue-rotate(60deg);
-}
-.highlight {
   font-size: 2rem;
-  color: #8BD24D;
   font-weight: bold;
+  color: #8BD24D;
+  margin-bottom: 1rem;
+}
+
+/* ======= FOOTER ======= */
+.footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  color: #555;
 }
 </style>
 </head>
@@ -175,39 +185,34 @@ li:hover { background: #f0f0f0; }
   </div>
 </header>
 
-<div class="max-w-xl mx-auto mt-6 bg-white p-6 rounded-xl shadow-md">
+<div class="container">
   <input type="text" id="searchInput" placeholder="Digite nome, apelido ou telefone" onkeyup="searchGuest(event)">
-  <button class="button-green w-full mb-4" onclick="performSearch()">Buscar Convidado</button>
-  <button class="button-gray w-full mb-6" onclick="refreshData()">🔄 Atualizar Dados</button>
+  <button class="button-green" onclick="performSearch()">Buscar Convidado</button>
+  <button class="button-gray" onclick="refreshData()">🔄 Atualizar Dados</button>
 
-  <h3 class="font-bold mt-4 mb-2">💚 Convidados (aguardando check-in)</h3>
+  <h3>💚 Pendentes (aguardando check-in)</h3>
   <ul id="pendingList"></ul>
 
-  <h3 class="font-bold mt-4 mb-2">✅ Check-in Realizado</h3>
+  <h3>🟢 Check-in Realizado</h3>
   <ul id="confirmedList"></ul>
 </div>
 
-<!-- 🔹 MODAL DE CONFIRMAÇÃO -->
+<!-- MODAL DE CONFIRMAÇÃO -->
 <div id="confirmationModal" class="modal-overlay">
   <div class="modal-box">
-    <p id="modalMessage" class="mb-4 font-semibold text-lg"></p>
-    <div class="flex justify-around gap-3">
-      <button class="button-green" onclick="confirmCheckin()">✅ Confirmar</button>
-      <button class="button-gray" onclick="cancelCheckin()">Cancelar</button>
-    </div>
+    <p id="modalMessage"></p>
+    <button class="button-green" onclick="confirmCheckin()">✅ Confirmar</button>
+    <button class="button-gray" onclick="cancelCheckin()">Cancelar</button>
   </div>
 </div>
 
-<!-- 🔹 TELA DE CHECK-IN CONFIRMADO -->
+<!-- TELA BRANCA DE RESUMO -->
 <div id="checkinConfirmation" class="checkin-overlay">
-  <div class="confirmation-card fade-in">
+  <div class="confirmation-card">
     <h2>✅ Check-in realizado!</h2>
-    <p id="confirmedName" class="font-semibold text-lg mb-2"></p>
-    <div class="mesa-info">
-      <img src="mesa-icon.png" alt="Mesa" class="mesa-icon" />
-      <span id="confirmedTable" class="highlight"></span>
-    </div>
-    <button class="button-green mt-4" onclick="newSearch()">Novo Check-in</button>
+    <p id="confirmedName"></p>
+    <div class="mesa-info" id="confirmedTable"></div>
+    <button class="button-green" onclick="newSearch()">Novo Check-in</button>
   </div>
 </div>
 
@@ -217,12 +222,11 @@ li:hover { background: #f0f0f0; }
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwEfTr6QOye-tvdPbH36if2Fj5k_XhP5iy4oAteV8P28M5gzR3Wiqbqhp6W1EASESBc/exec';
 let guests = [], selectedGuest = null;
 
-// 🔹 Carregar convidados
+// Carregar convidados
 async function loadGuestsFromSheets(){
   try {
     const res = await fetch(`${APPS_SCRIPT_URL}?action=getGuests`);
     const data = await res.json();
-    console.log('🔍 Retorno GAS:', data);
     if(data.sucesso){
       guests = data.convidados.map(g => ({...g, checkedIn: g.status === 'confirmado'}));
       updateGuestLists();
@@ -230,47 +234,46 @@ async function loadGuestsFromSheets(){
   } catch(e){ console.error(e); alert('Erro ao carregar convidados'); }
 }
 
-// 🔹 Atualizar listas
+// Atualizar listas
 function updateGuestLists(){
   const confirmed = document.getElementById('confirmedList');
   const pending = document.getElementById('pendingList');
   confirmed.innerHTML = ''; pending.innerHTML = '';
   guests.forEach(g => {
     const item = document.createElement('li');
-    item.innerHTML = `<strong>${g.nome}</strong>${g.apelido ? ' ('+g.apelido+')' : ''} - ${g.telefone} • <span class="highlight">${g.mesa}</span>`;
+    item.innerHTML = `<span><strong>${g.nome}</strong>${g.apelido ? ' ('+g.apelido+')' : ''}</span>`;
     if(g.status === 'confirmado'){
-      item.style.backgroundColor = '#DFF5E0';
+      item.classList.add('confirmado');
       confirmed.appendChild(item);
     } else {
-      item.style.backgroundColor = '#fff';
       item.onclick = () => openConfirmationModal(g);
       pending.appendChild(item);
     }
   });
 }
 
-// 🔹 Buscar convidado
+// Buscar convidado
 function normalize(str){ return str.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(); }
 function searchGuest(e){ if(e.key==='Enter') performSearch(); }
 function performSearch(){
   const term = normalize(document.getElementById('searchInput').value);
   const allLists = document.querySelectorAll('#pendingList li, #confirmedList li');
-  if(!term){ allLists.forEach(li=>li.style.display='block'); return; }
+  if(!term){ allLists.forEach(li=>li.style.display='flex'); return; }
   allLists.forEach(li=>li.style.display='none');
   guests.forEach(g=>{
     if(normalize(g.nome).includes(term) || normalize(g.apelido).includes(term) || g.telefone.includes(term)){
       const list = g.status==='confirmado' ? document.getElementById('confirmedList') : document.getElementById('pendingList');
       Array.from(list.children).forEach(li=>{
-        if(li.textContent.includes(g.nome)) li.style.display='block';
+        if(li.textContent.includes(g.nome)) li.style.display='flex';
       });
     }
   });
 }
 
-// 🔹 Modal
+// Modal
 function openConfirmationModal(guest){
   selectedGuest = guest;
-  document.getElementById('modalMessage').textContent = `Confirmar check-in de ${guest.nome}? Mesa ${guest.mesa}`;
+  document.getElementById('modalMessage').textContent = `Confirmar check-in de ${guest.nome}?`;
   document.getElementById('confirmationModal').classList.add('active');
 }
 function cancelCheckin(){
@@ -278,7 +281,7 @@ function cancelCheckin(){
   document.getElementById('confirmationModal').classList.remove('active');
 }
 
-// 🔹 Confirmar check-in
+// Confirmar check-in
 async function confirmCheckin(){
   if(!selectedGuest) return;
   try {
@@ -294,11 +297,10 @@ async function confirmCheckin(){
   cancelCheckin();
 }
 
-// 🔹 Tela branca de resumo
+// Tela branca de resumo
 function showCheckinConfirmation(guest){
-  document.getElementById('confirmationModal').classList.remove('active');
   document.getElementById('confirmedName').textContent = guest.nome;
-  document.getElementById('confirmedTable').textContent = guest.mesa;
+  document.getElementById('confirmedTable').textContent = `Mesa ${guest.mesa}`;
   document.getElementById('checkinConfirmation').classList.add('active');
 }
 function newSearch(){
@@ -309,7 +311,7 @@ function newSearch(){
   document.getElementById('searchInput').focus();
 }
 
-// 🔹 Atualizar manualmente
+// Atualizar manualmente
 async function refreshData(){ await loadGuestsFromSheets(); alert('Dados atualizados!'); }
 
 loadGuestsFromSheets();
