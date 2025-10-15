@@ -1,93 +1,93 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Check-in KB</title>
-  <link rel="icon" type="image/png" href="favicon.png">
-  <style>
-    body { font-family: "Poppins", sans-serif; background-color: #fafafa; color: #333; text-align: center; padding: 20px; }
-    .container { max-width: 500px; margin: 0 auto; background: #fff; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 30px; }
-    input, button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; }
-    button { background-color: #a87e6e; color: #fff; cursor: pointer; transition: 0.3s; }
-    button:hover { background-color: #8b6659; }
-    .alert { margin-top: 15px; padding: 15px; border-radius: 8px; font-weight: 600; }
-    .success { background-color: #d4edda; color: #155724; }
-    .warning { background-color: #fff3cd; color: #856404; }
-    .error { background-color: #f8d7da; color: #721c24; }
-    footer { margin-top: 40px; font-size: 13px; color: #888; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Check-in KB</title>
+<style>
+body{font-family:"Poppins",sans-serif;background:#fafafa;text-align:center;padding:20px;}
+.container{max-width:500px;margin:0 auto;background:#fff;border-radius:20px;box-shadow:0 4px 15px rgba(0,0,0,0.1);padding:30px;}
+input,button{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #ccc;font-size:16px;}
+button{background:#a87e6e;color:#fff;cursor:pointer;transition:0.3s;}
+button:hover{background:#8b6659;}
+.alert{margin-top:15px;padding:15px;border-radius:8px;font-weight:600;}
+.success{background:#d4edda;color:#155724;}
+.warning{background:#fff3cd;color:#856404;}
+.error{background:#f8d7da;color:#721c24;}
+</style>
 </head>
 <body>
-  <div>
-    <img src="monograma.png" alt="Monograma J & S" style="width:120px; margin-bottom:10px;">
-    <h2>Casamento Jackline e Samarthony</h2>
-    <p style="color:#777; font-size:14px;">06 de Dezembro de 2025 • Du Eventos</p>
-  </div>
+<div>
+<img src="monograma.png" alt="Monograma J & S" style="width:120px;margin-bottom:10px;">
+<h2>Casamento Jackline e Samarthony</h2>
+<p style="color:#777;font-size:14px;">06 de Dezembro de 2025 • Du Eventos</p>
+</div>
 
-  <div class="container">
-    <input type="text" id="busca" placeholder="Digite nome ou telefone do convidado">
-    <button onclick="buscarConvidado()">Buscar</button>
-    <div id="resultado"></div>
-    <div id="mensagem"></div>
-  </div>
+<div class="container">
+<input type="text" id="busca" placeholder="Digite nome ou telefone do convidado">
+<button onclick="buscarConvidado()">Buscar</button>
+<div id="resultado"></div>
+<div id="mensagem"></div>
+</div>
 
-  <footer>© 2025 Casamento Jackline e Samarthony • Check-in by Katiene Barbosa</footer>
+<footer>© 2025 Casamento Jackline e Samarthony • Check-in by Katiene Barbosa</footer>
 
-  <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzOA_IkLvKTLDC7ClBhz8NlZVFJ8Jh9Ag0CL6jJqn9bssGvzg3TR-1c8u_PI6mfVfkO/exec"; // substitua pelo link do Apps Script
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby4I_hY9fZ7y0q31QO6p65WsUGDeR64VyL1VKTrFAshT-co2vfJfXr_fk0RL_tBtj2-/exec";
 
-    async function buscarConvidado() {
-      const busca = document.getElementById("busca").value.trim();
-      const msg = document.getElementById("mensagem");
-      const resDiv = document.getElementById("resultado");
-      msg.innerHTML = ""; resDiv.innerHTML = "";
+async function buscarConvidado(){
+  const busca = document.getElementById("busca").value.trim();
+  const msg = document.getElementById("mensagem");
+  const resDiv = document.getElementById("resultado");
+  msg.innerHTML=""; resDiv.innerHTML="";
 
-      if (!busca) { msg.innerHTML = `<div class="alert error">❌ Digite nome ou telefone.</div>`; return; }
+  if(!busca){ msg.innerHTML=`<div class="alert error">❌ Digite nome ou telefone.</div>`; return; }
 
-      try {
-        const response = await fetch(`${SCRIPT_URL}?action=buscar&query=${encodeURIComponent(busca)}`);
-        const data = await response.json();
+  try{
+    const response = await fetch(`${SCRIPT_URL}?action=buscar&query=${encodeURIComponent(busca)}`);
+    const data = await response.json();
 
-        if (data.status === "ok" && data.resultados.length > 0) {
-          const convidado = data.resultados[0];
-          resDiv.innerHTML = `
-            <p><strong>Nome:</strong> ${convidado.nome}<br>
-            <strong>Mesa:</strong> ${convidado.mesa}<br>
-            <strong>Status:</strong> ${convidado.status}</p>
-            <button onclick="confirmarEntrada('${convidado.nome}','${convidado.telefone}','${convidado.mesa}')">Confirmar entrada</button>
-          `;
-        } else {
-          msg.innerHTML = `<div class="alert error">❌ Convite inválido ou não encontrado.</div>`;
-        }
-      } catch (err) {
-        msg.innerHTML = `<div class="alert error">❌ Erro ao buscar convidado.</div>`;
-      }
+    if(data.status==="ok" && data.results.length>0){
+      const convidado = data.results[0];
+      const jaCheckin = (convidado.status.toLowerCase()==="checkin" || convidado.status.toLowerCase()==="chegado");
+      resDiv.innerHTML=`
+        <p><strong>Nome:</strong> ${convidado.nome}<br>
+        <strong>Mesa:</strong> ${convidado.mesa}<br>
+        <strong>Status:</strong> ${convidado.status}</p>
+        <button ${jaCheckin?'disabled style="background:#ccc; cursor:not-allowed;"':''} 
+          onclick="confirmarEntrada('${convidado.nome}','${convidado.telefone}','${convidado.mesa}')">
+          ${jaCheckin?'✅ Já confirmado':'Confirmar entrada'}
+        </button>`;
+      if(jaCheckin) msg.innerHTML=`<div class="alert warning">⚠️ Convidado já fez check-in.</div>`;
+    } else {
+      msg.innerHTML=`<div class="alert error">❌ Convite inválido ou não encontrado.</div>`;
     }
+  }catch(err){ msg.innerHTML=`<div class="alert error">❌ Erro ao buscar convidado.</div>`; }
+}
 
-    async function confirmarEntrada(nome, telefone, mesa) {
-      const msg = document.getElementById("mensagem");
-      if (!confirm(`Confirmar entrada de:\n${nome}\nMesa: ${mesa}?`)) return;
+async function confirmarEntrada(nome, telefone, mesa){
+  const msg=document.getElementById("mensagem");
+  const confirmar = confirm(`Confirmar entrada de:\n${nome}\nMesa: ${mesa}?`);
+  if(!confirmar) return;
 
-      try {
-        const response = await fetch(SCRIPT_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: "checkin", nome, telefone }),
-          headers: { "Content-Type": "application/json" }
-        });
-        const data = await response.json();
+  try{
+    const response = await fetch(SCRIPT_URL,{
+      method:"POST",
+      body:JSON.stringify({action:"checkin", nome, telefone}),
+      headers:{"Content-Type":"application/json"}
+    });
+    const data = await response.json();
 
-        if (data.status === "ok") {
-          msg.innerHTML = `<div class="alert success">✅ Convidado confirmado!<br><strong>${data.nome}</strong><br>Mesa: ${data.mesa}</div>`;
-        } else if (data.status === "already") {
-          msg.innerHTML = `<div class="alert warning">⚠️ Convidado já fez check-in.</div>`;
-        } else {
-          msg.innerHTML = `<div class="alert error">❌ Erro: ${data.message || "Falha ao registrar."}</div>`;
-        }
-      } catch (err) {
-        msg.innerHTML = `<div class="alert error">❌ Erro na conexão.</div>`;
-      }
+    if(data.status==="ok"){
+      msg.innerHTML=`<div class="alert success">✅ Convidado confirmado!<br><strong>${data.nome}</strong><br>Mesa: ${data.mesa}</div>`;
+      buscarConvidado();
+    } else if(data.status==="already"){
+      msg.innerHTML=`<div class="alert warning">⚠️ Convidado já fez check-in.</div>`;
+    } else {
+      msg.innerHTML=`<div class="alert error">❌ Erro: ${data.message || "Falha ao registrar."}</div>`;
     }
-  </script>
+  }catch(err){ msg.innerHTML=`<div class="alert error">❌ Erro na conexão.</div>`; }
+}
+</script>
 </body>
 </html>
