@@ -3,119 +3,62 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Check-in de Convidados - Jackeline & Samarthony</title>
-<link rel="icon" href="favicon.png" type="image/png">
+<title>Check-in de Convidados - J & S</title>
+<link rel="icon" href="favicon-verde.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
 body { font-family:'Open Sans', sans-serif; margin:0; background:#fff; color:#333; }
-
-/* === CABEÇALHO === */
-.header {
-  background-color: #cff1a9;
-  color: #000;
-  padding: 1.5rem 2rem;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-.header-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-  max-width: 900px;
-  margin: 0 auto;
-}
-.logo {
-  height: 100px;
-  width: auto;
-  border-radius: 50%;
-  object-fit: cover;
-}
-.header-text {
-  text-align: center;
-}
-.couple-names {
-  font-family: 'Great Vibes', cursive;
-  font-size: 2.5rem;
-  margin: 0;
-  line-height: 1.2;
-}
-.event-info {
-  font-family: 'Open Sans', sans-serif;
-  font-size: 0.5rem;
-  margin-top: 0.3rem;
-  letter-spacing: 0.5px;
-}
-@media (max-width: 600px) {
-  .header-container { flex-direction: column; }
-  .couple-names { font-size: 2rem; }
-  .logo { height: 70px; }
-}
-
-/* === SEU CSS ORIGINAL === */
-.fade-in { animation: fadeIn 1s ease-in; }
-@keyframes fadeIn { from {opacity:0;transform:translateY(20px);} to {opacity:1;transform:translateY(0);} }
-.pulse-success { animation: pulseSuccess 1.5s ease-in-out; }
-@keyframes pulseSuccess {0%{transform:scale(1);}50%{transform:scale(1.05);background-color:#8BD24D;}100%{transform:scale(1);}}
-.highlight { font-weight:bold; font-size:1.25rem; color:#8BD24D;}
-.footer { text-align:center; padding:1rem; font-size:0.9rem; background:#f0f0f0; margin-top:2rem; }
-.button-green { background-color:#8BD24D; color:white; padding:0.75rem 1rem; border-radius:0.75rem; font-weight:bold; cursor:pointer; transition:0.3s; }
-.button-green:hover { background-color:#76b441; }
-.button-gray { background-color:#ccc; color:#333; padding:0.5rem 1rem; border-radius:0.75rem; cursor:pointer; }
-.hidden { display:none; }
-input { padding:0.75rem; border-radius:0.75rem; border:2px solid #ccc; width:100%; margin-bottom:0.5rem; }
-ul { list-style:none; padding:0; margin:0; }
-li { cursor:pointer; }
+.header { background-color:#cff1a9; color:#000; padding:1.5rem 2rem; box-shadow:0 2px 10px rgba(0,0,0,0.1);}
+.header-container { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:1rem; max-width:900px; margin:0 auto;}
+.logo { height:100px; width:auto; border-radius:50%; object-fit:cover;}
+.header-text { text-align:center;}
+.couple-names { font-family:'Great Vibes', cursive; font-size:2.5rem; margin:0; line-height:1.2;}
+.event-info { font-family:'Open Sans', sans-serif; font-size:0.75rem; margin-top:0.3rem; letter-spacing:0.5px;}
+@media (max-width:600px){.header-container{flex-direction:column;}.couple-names{font-size:2rem;}.logo{height:70px;}}
+.fade-in{animation:fadeIn 1s ease-in;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.pulse-success{animation:pulseSuccess 1.5s ease-in-out;}
+@keyframes pulseSuccess{0%{transform:scale(1);}50%{transform:scale(1.05);background-color:#8BD24D;}100%{transform:scale(1);}}
+.highlight{font-weight:bold;font-size:1.25rem;color:#8BD24D;}
+.footer{text-align:center;padding:1rem;font-size:0.9rem;background:#f0f0f0;margin-top:2rem;}
+.button-green{background-color:#8BD24D;color:white;padding:0.75rem 1rem;border-radius:0.75rem;font-weight:bold;cursor:pointer;transition:0.3s;}
+.button-green:hover{background-color:#76b441;}
+.button-gray{background-color:#ccc;color:#333;padding:0.5rem 1rem;border-radius:0.75rem;cursor:pointer;}
+.hidden{display:none;}
+ul{list-style:none;padding:0;margin:0;}
+li{cursor:pointer;padding:0.5rem;border:1px solid #ccc;border-radius:0.5rem;margin-bottom:0.25rem;}
+li.checked{background-color:#DFF5E0;}
+input{padding:0.75rem;border-radius:0.75rem;border:2px solid #ccc;width:100%;margin-bottom:0.5rem;}
 </style>
 </head>
-
 <body>
 
-<!-- 🔰 CABEÇALHO REFINADO -->
 <header class="header">
   <div class="header-container">
     <img src="monograma.png" alt="Monograma Jackeline & Samarthony" class="logo">
     <div class="header-text">
-      <h1 class="couple-names">Jackeline e Samarthony</h1>
+      <h1 class="couple-names">Jackline e Samarthony</h1>
       <p class="event-info">06/12/2025 • Du Eventos</p>
     </div>
   </div>
 </header>
+
 <div class="max-w-xl mx-auto mt-6 bg-white p-6 rounded-xl shadow-md">
-  <input type="text" id="searchInput" placeholder="Digite nome, apelido ou telefone" onkeyup="searchGuest(event)">
-  <button class="button-green w-full mb-2" onclick="performSearch()">Buscar Convidado</button>
-  <button class="button-gray w-full mb-2" onclick="refreshData()">🔄 Atualizar Dados</button>
-
-  <h3 class="font-bold mt-4 mb-2">⏳ Convidados Pendentes</h3>
-  <ul id="pendingList" class="space-y-2"></ul>
-
-  <h3 class="font-bold mt-4 mb-2">✅ Convidados Check-in Realizado</h3>
-  <ul id="confirmedList" class="space-y-2"></ul>
+  <input type="text" id="searchInput" placeholder="Buscar nome, apelido ou telefone" onkeyup="filterList(event)">
+  <button class="button-gray w-full mb-4" onclick="refreshData()">🔄 Atualizar Lista</button>
+  <h3 class="font-bold mt-2 mb-2">📋 Lista de Convidados Confirmados</h3>
+  <ul id="guestList" class="space-y-2"></ul>
 </div>
 
-<!-- Modal de Confirmação -->
-<div id="confirmationModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-  <div class="bg-white p-6 rounded-xl max-w-sm text-center">
-    <p id="modalMessage" class="mb-4 font-semibold"></p>
-    <div class="flex justify-around">
-      <button class="button-green" onclick="confirmCheckin()">Confirmar</button>
-      <button class="button-gray" onclick="cancelCheckin()">Cancelar</button>
-    </div>
-  </div>
-</div>
-
-<!-- Tela de Check-in Confirmado -->
 <div id="checkinConfirmation" class="hidden max-w-xl mx-auto mt-6 p-6 bg-white rounded-xl shadow-md fade-in text-center">
   <h2 class="text-2xl mb-2">✅ Check-in realizado!</h2>
   <p id="confirmedName" class="mb-2 font-semibold"></p>
   <p id="confirmedTable" class="highlight mb-4"></p>
-  <button class="button-gray" onclick="newSearch()">Novo Check-in</button>
+  <button class="button-gray" onclick="newCheckin()">Novo Check-in</button>
 </div>
 
-<div class="footer">
-  Criado por Katiene Barbosa
-</div>
+<div class="footer">Criado por Katiene Barbosa</div>
 
 <script>
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxD6XpmlV52Jci_udnwqwdqUIXLHY7MvG5s2srloHYF8GCqgBeaJDSnrppF7jbcwaiM/exec';
@@ -123,98 +66,70 @@ let guests=[], selectedGuest=null;
 
 async function loadGuestsFromSheets(){
   try{
-    const res = await fetch(`${https://script.google.com/macros/s/AKfycbxD6XpmlV52Jci_udnwqwdqUIXLHY7MvG5s2srloHYF8GCqgBeaJDSnrppF7jbcwaiM/exec}?action=getGuests`);
+    const res = await fetch(`${APPS_SCRIPT_URL}?action=getGuests`);
     const data = await res.json();
-    if(data.success){
-      guests = data.guests;
-      updateGuestLists();
-    }
-  }catch(e){console.error(e);}
+    if(data.sucesso){
+      guests = data.convidados.map(g => ({...g, checkedIn: g.status==='confirmado'}));
+      updateGuestList();
+    } else { alert('Erro: ' + data.erro); }
+  }catch(e){ console.error(e); alert('Erro ao carregar convidados'); }
 }
 
-function updateGuestLists(){
-  const confirmed = document.getElementById('confirmedList');
-  const pending = document.getElementById('pendingList');
-  confirmed.innerHTML = '';
-  pending.innerHTML = '';
-  guests.forEach(g=>{
-    const item = document.createElement('li');
-    item.className='p-3 rounded-xl border mb-1';
-    item.innerHTML = `<strong>${g.nome}</strong>${g.apelido ? ' (' + g.apelido + ')' : ''} - ${g.telefone} • <span class="highlight">${g.mesa}</span>`;
-    if(g.status==='confirmado'){
-      item.style.backgroundColor='#DFF5E0';
-      confirmed.appendChild(item);
-    } else {
-      item.style.backgroundColor='#fff';
-      item.onclick = ()=>openConfirmationModal(g);
-      pending.appendChild(item);
-    }
+function updateGuestList(filteredGuests){
+  const list = document.getElementById('guestList');
+  list.innerHTML = '';
+  const data = filteredGuests || guests;
+  data.forEach(g=>{
+    const li=document.createElement('li');
+    li.textContent=`${g.nome}${g.apelido?' ('+g.apelido+')':''} - ${g.telefone} • Mesa ${g.mesa}`;
+    if(g.checkedIn) li.classList.add('checked');
+    li.onclick = ()=>{ if(!g.checkedIn) markCheckin(g); };
+    list.appendChild(li);
   });
 }
 
-function searchGuest(e){ if(e.key==='Enter') performSearch(); }
+function normalizeText(str){ return str.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(); }
 
-function performSearch(){
-  const term = document.getElementById('searchInput').value.toLowerCase();
-  if(!term){ updateGuestLists(); return; }
-  guests.forEach(g=>{
-    const allLists = document.querySelectorAll('#pendingList li, #confirmedList li');
-    allLists.forEach(li=>li.style.display='none');
-   const normalize = str => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-if (
-  normalize(g.nome).includes(normalize(term)) ||
-  normalize(g.apelido).includes(normalize(term)) ||
-  g.telefone.includes(term)
-) {
-
-      const list = g.status==='confirmado'? document.getElementById('confirmedList') : document.getElementById('pendingList');
-      Array.from(list.children).forEach(li=>{
-        if(li.textContent.includes(g.nome)) li.style.display='block';
-      });
-    }
-  });
+function filterList(e){
+  if(e.key && e.key!=='Enter') return;
+  const term = normalizeText(document.getElementById('searchInput').value);
+  if(!term){ updateGuestList(); return; }
+  const filtered = guests.filter(g=>normalizeText(g.nome).includes(term) || normalizeText(g.apelido).includes(term) || g.telefone.includes(term));
+  updateGuestList(filtered);
 }
 
-function openConfirmationModal(guest){
-  selectedGuest = guest;
-  document.getElementById('modalMessage').textContent = `Confirmar check-in de ${guest.nome} (${guest.mesa})?`;
-  document.getElementById('confirmationModal').classList.remove('hidden');
-}
-
-function cancelCheckin(){ selectedGuest=null; document.getElementById('confirmationModal').classList.add('hidden'); }
-
-async function confirmCheckin(){
-  if(!selectedGuest) return;
+async function markCheckin(guest){
+  selectedGuest=guest;
   try{
-    const payload = {action:'checkin', guestId:selectedGuest.id, timestamp:new Date().toISOString()};
-    const res = await fetch(https://script.google.com/macros/s/AKfycbxD6XpmlV52Jci_udnwqwdqUIXLHY7MvG5s2srloHYF8GCqgBeaJDSnrppF7jbcwaiM/exec,{method:'POST',body:JSON.stringify(payload)});
+    const payload={action:'checkin', guestId:guest.id, timestamp:new Date().toISOString()};
+    const res = await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify(payload)});
     const data = await res.json();
-    if(data.success){
-      selectedGuest.status='confirmado';
-      updateGuestLists();
-      showCheckinConfirmation(selectedGuest);
-    }else{ alert(data.error); }
-  }catch(e){console.error(e);}
-  cancelCheckin();
+    if(data.sucesso){
+      guest.checkedIn=true;
+      updateGuestList();
+      showCheckinConfirmation(guest);
+    }else{ alert(data.erro); }
+  }catch(e){ console.error(e); alert('Erro ao marcar check-in'); }
 }
 
 function showCheckinConfirmation(guest){
-  document.getElementById('confirmedName').textContent = guest.nome;
-  document.getElementById('confirmedTable').textContent = guest.mesa;
-  document.getElementById('checkinConfirmation').classList.remove('hidden');
-  document.getElementById('checkinConfirmation').classList.add('pulse-success');
+  document.getElementById('confirmedName').textContent=guest.nome;
+  document.getElementById('confirmedTable').textContent='Mesa '+guest.mesa;
+  const div=document.getElementById('checkinConfirmation');
+  div.classList.remove('hidden');
+  div.classList.add('pulse-success');
 }
 
-function newSearch(){
+function newCheckin(){
   selectedGuest=null;
+  const div=document.getElementById('checkinConfirmation');
+  div.classList.add('hidden');
+  div.classList.remove('pulse-success');
   document.getElementById('searchInput').value='';
-  document.getElementById('checkinConfirmation').classList.add('hidden'); 
-  document.getElementById('checkinConfirmation').classList.remove('pulse-success');
-  updateGuestLists();
-  document.getElementById('searchInput').focus();
+  updateGuestList();
 }
 
-async function refreshData(){ await loadGuestsFromSheets(); alert('Dados atualizados!'); }
+async function refreshData(){ await loadGuestsFromSheets(); alert('Lista atualizada!'); }
 
 loadGuestsFromSheets();
 document.getElementById('searchInput').focus();
@@ -222,9 +137,3 @@ document.getElementById('searchInput').focus();
 
 </body>
 </html>
-
-
-
-
-
-
