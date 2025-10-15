@@ -8,13 +8,13 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 body { font-family:sans-serif; margin:0; background:#fff; color:#333; }
-.header { background-color:#8BD24D; color:white; padding:1.5rem; border-bottom:4px solid #fff; text-align:center; }
+.header { background-color:#8BD24D; color:white; padding:1.5rem; text-align:center; }
 .header img { max-height:80px; margin-bottom:0.5rem; }
 .fade-in { animation: fadeIn 0.5s ease-in; }
-@keyframes fadeIn { from { opacity:0; transform:translateY(20px);} to { opacity:1; transform:translateY(0);} }
+@keyframes fadeIn { from {opacity:0;transform:translateY(20px);} to {opacity:1;transform:translateY(0);} }
 .pulse-success { animation: pulseSuccess 1.5s ease-in-out; }
-@keyframes pulseSuccess { 0%{transform:scale(1);}50%{transform:scale(1.05);background-color:#8BD24D;}100%{transform:scale(1);} }
-.highlight { font-weight:bold; font-size:1.25rem; color:#8BD24D; }
+@keyframes pulseSuccess {0%{transform:scale(1);}50%{transform:scale(1.05);background-color:#8BD24D;}100%{transform:scale(1);}}
+.highlight { font-weight:bold; font-size:1.25rem; color:#8BD24D;}
 .footer { text-align:center; padding:1rem; font-size:0.9rem; background:#f0f0f0; margin-top:2rem; }
 .button-green { background-color:#8BD24D; color:white; padding:0.75rem 1rem; border-radius:0.75rem; font-weight:bold; cursor:pointer; transition:0.3s; }
 .button-green:hover { background-color:#76b441; }
@@ -25,14 +25,12 @@ input { padding:0.75rem; border-radius:0.75rem; border:2px solid #ccc; width:100
 </head>
 <body>
 
-<!-- Cabeçalho -->
 <div class="header">
   <img src="monograma.png" alt="Monograma Jackeline & Samarthony" />
   <div class="text-lg font-bold">Jackeline & Samarthony</div>
   <div class="text-sm">06/12/2025 - Du Eventos</div>
 </div>
 
-<!-- Contadores -->
 <div class="max-w-xl mx-auto mt-6 text-center">
   <div class="flex justify-between mb-4">
     <div>Chegaram: <span id="checkedInCount">0</span></div>
@@ -41,7 +39,6 @@ input { padding:0.75rem; border-radius:0.75rem; border:2px solid #ccc; width:100
   </div>
 </div>
 
-<!-- Seção de busca -->
 <div class="max-w-xl mx-auto bg-white p-6 rounded-xl shadow-md">
   <input type="text" id="searchInput" placeholder="Digite nome, apelido ou telefone" onkeyup="searchGuest(event)">
   <button class="button-green w-full mb-2" onclick="performSearch()">Buscar Convidado</button>
@@ -49,7 +46,7 @@ input { padding:0.75rem; border-radius:0.75rem; border:2px solid #ccc; width:100
   <div id="searchResults" class="mt-4 hidden"></div>
 </div>
 
-<!-- Modal de confirmação -->
+<!-- Modal de Confirmação -->
 <div id="confirmationModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
   <div class="bg-white p-6 rounded-xl max-w-sm text-center">
     <p id="modalMessage" class="mb-4 font-semibold"></p>
@@ -60,7 +57,7 @@ input { padding:0.75rem; border-radius:0.75rem; border:2px solid #ccc; width:100
   </div>
 </div>
 
-<!-- Tela de check-in confirmado -->
+<!-- Tela de Check-in Confirmado -->
 <div id="checkinConfirmation" class="hidden max-w-xl mx-auto mt-6 p-6 bg-white rounded-xl shadow-md fade-in text-center">
   <h2 class="text-2xl mb-2">✅ Check-in realizado!</h2>
   <p id="confirmedName" class="mb-2 font-semibold"></p>
@@ -68,109 +65,109 @@ input { padding:0.75rem; border-radius:0.75rem; border:2px solid #ccc; width:100
   <button class="button-gray" onclick="newSearch()">Novo Check-in</button>
 </div>
 
-<!-- Rodapé -->
 <div class="footer">
   Criado por Katiene Barbosa
 </div>
 
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxZNCEoXg4iX7_WlEoQpl5gxPO-_CLnGpP6uB_hqUxf1wi_nSlXcZQ_TbEvBfWmG5XK/exec';
-let guests=[], checkedInGuests=0, isOnline=false, selectedGuest=null;
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzztcB7qdvZRfAVz3w-VuSyCfBSbmUYwll5bJ1iyYCZ5EoB9eIrc6f9_b7ZyG48lYp9/exec';
+let guests=[], checkedInGuests=0, selectedGuest=null;
 
-// Carregar convidados
+// Carrega convidados
 async function loadGuestsFromSheets(){
   try{
     const res = await fetch(`${APPS_SCRIPT_URL}?action=getGuests`);
     const data = await res.json();
     if(data.success){
-      guests=data.guests;
+      guests = data.guests;
       checkedInGuests = guests.filter(g=>g.status==='confirmado').length;
       updateCounters();
-      isOnline=true;
-    }else throw new Error(data.error);
-  }catch(e){
-    console.error(e);
-    guests=[];
-    isOnline=false;
-  }
+    }
+  }catch(e){console.error(e);}
 }
 
+// Atualiza contadores
 function updateCounters(){
-  document.getElementById('checkedInCount').textContent=checkedInGuests;
-  document.getElementById('totalGuests').textContent=guests.length;
-  document.getElementById('pendingCount').textContent=guests.length-checkedInGuests;
+  document.getElementById('checkedInCount').textContent = checkedInGuests;
+  document.getElementById('totalGuests').textContent = guests.length;
+  document.getElementById('pendingCount').textContent = guests.length - checkedInGuests;
 }
 
-// Busca
-function searchGuest(event){ if(event.key==='Enter') performSearch(); }
+// Busca ao pressionar Enter
+function searchGuest(e){ if(e.key==='Enter') performSearch(); }
+
+// Realiza busca
 function performSearch(){
-  const term=document.getElementById('searchInput').value.toLowerCase();
-  const div=document.getElementById('searchResults');
-  div.innerHTML='';
+  const term = document.getElementById('searchInput').value.toLowerCase();
+  const div = document.getElementById('searchResults');
+  div.innerHTML=''; div.classList.add('hidden');
   if(!term){ div.innerHTML='<p>Digite nome, apelido ou telefone</p>'; div.classList.remove('hidden'); return;}
-  const results=guests.filter(g=>g.nome.toLowerCase().includes(term)||g.apelido.toLowerCase().includes(term)||g.telefone.includes(term));
+  const results = guests.filter(g=> g.nome.toLowerCase().includes(term) || g.apelido.toLowerCase().includes(term) || g.telefone.includes(term));
   if(results.length===0){ div.innerHTML='<p>Nenhum convidado encontrado</p>'; div.classList.remove('hidden'); return;}
   results.forEach(g=>{
     const btn=document.createElement('button');
     btn.className='button-gray w-full mb-1 text-left';
     btn.textContent=`${g.nome} (${g.apelido}) - ${g.telefone}`;
-    btn.onclick=()=>openConfirmationModal(g);
     if(g.status==='confirmado') btn.style.backgroundColor='#8BD24D';
+    btn.onclick=()=>openConfirmationModal(g);
     div.appendChild(btn);
   });
   div.classList.remove('hidden');
 }
 
-// Modal
+// Abre modal de confirmação
 function openConfirmationModal(guest){
-  if(guest.status==='confirmado'){ alert('Convidado já fez check-in!'); return;}
-  selectedGuest=guest;
-  document.getElementById('modalMessage').textContent=`Confirmar check-in para: ${guest.nome} (${guest.apelido})\nMesa: ${guest.mesa}`;
+  if(guest.status==='confirmado'){ alert('Check-in já realizado!'); return; }
+  selectedGuest = guest;
+  document.getElementById('modalMessage').textContent = `Confirmar check-in de ${guest.nome} (${guest.mesa})?`;
   document.getElementById('confirmationModal').classList.remove('hidden');
 }
 
+// Cancelar
+function cancelCheckin(){ selectedGuest=null; document.getElementById('confirmationModal').classList.add('hidden'); }
+
+// Confirmar
 async function confirmCheckin(){
   if(!selectedGuest) return;
-  selectedGuest.status='confirmado';
   try{
-    if(isOnline){
-      await fetch(APPS_SCRIPT_URL,{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({action:'checkin', guestId:selectedGuest.id, timestamp:new Date().toISOString()})
-      });
-    }
-  }catch(e){ console.error(e); }
-  showCheckinConfirmation(selectedGuest);
-  document.getElementById('confirmationModal').classList.add('hidden');
+    const payload = {action:'checkin', guestId:selectedGuest.id, timestamp:new Date().toISOString()};
+    const res = await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify(payload)});
+    const data = await res.json();
+    if(data.success){
+      selectedGuest.status='confirmado';
+      checkedInGuests++;
+      updateCounters();
+      showCheckinConfirmation(selectedGuest);
+    }else{ alert(data.error); }
+  }catch(e){console.error(e);}
+  cancelCheckin();
 }
 
-function cancelCheckin(){ selectedGuest=null; document.getElementById('confirmationModal').classList.add('hidden'); }
+// Mostra check-in confirmado
 function showCheckinConfirmation(guest){
-  checkedInGuests++;
-  updateCounters();
-  document.getElementById('confirmedName').textContent=guest.nome;
-  document.getElementById('confirmedTable').textContent='Mesa: '+guest.mesa;
-  const div=document.getElementById('checkinConfirmation');
-  div.classList.remove('hidden');
-  div.classList.add('pulse-success');
+  document.getElementById('confirmedName').textContent = guest.nome;
+  document.getElementById('confirmedTable').textContent = guest.mesa;
+  document.getElementById('checkinConfirmation').classList.remove('hidden');
+  document.getElementById('checkinConfirmation').classList.add('pulse-success');
 }
+
+// Novo check-in
 function newSearch(){
-  document.getElementById('searchInput').value='';
-  document.getElementById('searchResults').innerHTML='';
-  document.getElementById('searchResults').classList.add('hidden');
-  document.getElementById('checkinConfirmation').classList.add('hidden');
-  document.getElementById('checkinConfirmation').classList.remove('pulse-success');
   selectedGuest=null;
+  document.getElementById('searchInput').value='';
+  document.getElementById('searchResults').innerHTML=''; document.getElementById('searchResults').classList.add('hidden');
+  document.getElementById('checkinConfirmation').classList.add('hidden'); document.getElementById('checkinConfirmation').classList.remove('pulse-success');
   document.getElementById('searchInput').focus();
 }
 
-// Inicializar
+// Atualizar dados
+async function refreshData(){ await loadGuestsFromSheets(); alert('Dados atualizados!'); }
+
+// Inicialização
 loadGuestsFromSheets();
 updateCounters();
 document.getElementById('searchInput').focus();
-
-async function refreshData(){ await loadGuestsFromSheets(); alert('Dados atualizados!'); }
 </script>
+
 </body>
 </html>
