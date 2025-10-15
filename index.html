@@ -8,145 +8,98 @@
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-body { font-family:'Open Sans', sans-serif; margin:0; background:#fff; color:#333; }
-.header { background-color:#ffffff; color:8bd24d; padding:0.5rem 1.2rem; box-shadow:0 2px 10px rgba(0,0,0,0.1); }
-.header-container { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:1rem; max-width:700px; margin:0 auto; }
-.logo { height:140px; width:auto; border-radius:50%; object-fit:cover; }
-.header-text { text-align:center; }
-.couple-names { font-family:'Great Vibes', cursive; font-size:1.5rem; margin:0; line-height:1.2; }
-.event-info { font-family:'Open Sans', sans-serif; font-size:0.9rem; margin-top:0.3rem; letter-spacing:0.5px; }
-@media(max-width:600px){ .header-container{flex-direction:column;} .couple-names{font-size:2rem;} .logo{height:80px;} }
-.fade-in{animation:fadeIn 1s ease-in;} @keyframes fadeIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
-.pulse-success{animation:pulseSuccess 1.5s ease-in-out;} @keyframes pulseSuccess{0%{transform:scale(1);}50%{transform:scale(1.05);background-color:#8BD24D;}100%{transform:scale(1);}}
-.highlight{font-weight:bold;font-size:1.25rem;color:#8BD24D;}
-.footer{text-align:center;padding:1rem;font-size:0.9rem;background:#f0f0f0;margin-top:2rem;}
-.button-green{background-color:#8BD24D;color:white;padding:0.75rem 1rem;border-radius:0.75rem;font-weight:bold;cursor:pointer;transition:0.3s;}
-.button-green:hover{background-color:#76b441;}
-.button-gray{background-color:#ccc;color:#333;padding:0.5rem 1rem;border-radius:0.75rem;cursor:pointer;}
-.hidden{display:none;}
-input{padding:0.75rem;border-radius:0.75rem;border:2px solid #ccc;width:100%;margin-bottom:0.5rem;}
-ul{list-style:none;padding:0;margin:0;}
-li{cursor:pointer;padding:0.5rem;border-radius:0.5rem;}
-li:hover{background:#f0f0f0;}
-  
-/* 🔹 MODAL ESCURO DE CONFIRMAÇÃO */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  animation: fadeIn 0.3s ease-in;
-}
-.modal-box {
+body {
+  font-family: 'Open Sans', sans-serif;
+  margin: 0;
   background: #fff;
-  border-radius: 1rem;
-  padding: 2rem;
-  text-align: center;
-  max-width: 400px;
-  width: 90%;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-  animation: slideUp 0.4s ease-out;
-}
-@keyframes slideUp {
-  from { transform: translateY(40px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  color: #333;
 }
 
-/* 🔹 TELA BRANCA DE CONFIRMAÇÃO FINAL */
-.checkin-overlay {
-  position: fixed;
-  inset: 0;
-  background: #ffffff;
+/* ======= CABEÇALHO ======= */
+.header {
+  background-color: #ffffff;
+  color: #8bd24d;
+  padding: 0.5rem 1.2rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.header-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1100;
-  animation: fadeIn 0.5s ease-in;
+  flex-wrap: wrap;
+  gap: 1rem;
+  max-width: 700px;
+  margin: 0 auto;
 }
-.confirmation-card {
-  text-align: center;
+.logo {
+  height: 160px;
+  width: auto;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-top: -10px; /* sobe um pouco o monograma */
 }
-.confirmation-card h2 {
+.header-text { text-align: center; }
+.couple-names {
+  font-family: 'Great Vibes', cursive;
   font-size: 2rem;
-  color: #8BD24D;
+  margin: 0;
+  line-height: 1.2;
+}
+.event-info {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+  letter-spacing: 0.5px;
+}
+@media(max-width:600px){
+  .header-container { flex-direction: column; }
+  .couple-names { font-size: 1.8rem; }
+  .logo { height: 100px; margin-top: 0; }
+}
+
+/* ======= GERAL ======= */
+.fade-in { animation: fadeIn 1s ease-in; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.highlight { font-weight: bold; font-size: 1.25rem; color: #8BD24D; }
+.footer { text-align: center; padding: 1rem; font-size: 0.9rem; background: #f0f0f0; margin-top: 2rem; }
+
+.button-green {
+  background-color: #8BD24D;
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.button-green:hover { background-color: #76b441; }
+
+.button-gray {
+  background-color: #ccc;
+  color: #333;
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  cursor: pointer;
+}
+
+.hidden { display: none; }
+
+input {
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  border: 2px solid #ccc;
+  width: 100%;
   margin-bottom: 0.5rem;
 }
-.confirmation-card p {
-  margin: 0.5rem 0;
-}
-.mesa-info {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  margin: 1rem 0;
-}
-.mesa-icon {
-  width: 50px;
-  height: 50px;
-  filter: hue-rotate(60deg);
-}
-.highlight {
-  font-size: 2rem;
-  color: #8BD24D;
-  font-weight: bold;
-}
 
-</style>
-</head>
-<body>
+ul { list-style: none; padding: 0; margin: 0; }
+li { cursor: pointer; padding: 0.5rem; border-radius: 0.5rem; }
+li:hover { background: #f0f0f0; }
 
-<header class="header">
-  <div class="header-container">
-    <img src="monograma.png" alt="Monograma" class="logo">
-    <div class="header-text">
-      <h1 class="couple-names">Jackeline e Samarthony</h1>
-      <p class="event-info">06/12/2025 • Du Eventos</p>
-    </div>
-  </div>
-</header>
-
-<div class="max-w-xl mx-auto mt-6 bg-white p-6 rounded-xl shadow-md">
-  <input type="text" id="searchInput" placeholder="Digite nome, apelido ou telefone" onkeyup="searchGuest(event)">
-  <button class="button-green w-full mb-6" onclick="performSearch()">Buscar Convidado</button>
-  <button class="button-gray w-full mb-6" onclick="refreshData()">🔄 Atualizar Dados</button>
-
-  <h3 class="font-bold mt-4 mb-2">💚 📝 Convidados Confirmados</h3>
-  <ul id="pendingList"></ul>
-
-  <h3 class="font-bold mt-4 mb-2">🟢 ✔ Check-in Realizado</h3>
-  <ul id="confirmedList"></ul>
-</div>
-
-<!-- 🔹 MODAL DE CONFIRMAÇÃO -->
-<div id="confirmationModal" class="hidden modal-overlay">
-  <div class="modal-box">
-    <p id="modalMessage" class="mb-4 font-semibold text-lg"></p>
-    <div class="flex justify-around gap-3">
-      <button class="button-green" onclick="confirmCheckin()">✅ Confirmar</button>
-      <button class="button-gray" onclick="cancelCheckin()">Cancelar</button>
-    </div>
-  </div>
-</div>
-
-<!-- 🔹 TELA DE CHECK-IN CONFIRMADO -->
-<div id="checkinConfirmation" class="hidden checkin-overlay">
-  <div class="confirmation-card fade-in">
-    <h2>✅ Check-in realizado!</h2>
-    <p id="confirmedName" class="font-semibold text-lg mb-2"></p>
-    <div class="mesa-info">
-      <img src="mesa-icon.png" alt="Mesa" class="mesa-icon" />
-      <span id="confirmedTable" class="highlight"></span>
-    </div>
-    <button class="button-green mt-4" onclick="newSearch()">Novo Check-in</button>
-  </div>
-</div>
-
-<style>
-/* 🔹 MODAL ESCURO DE CONFIRMAÇÃO */
+/* ======= MODAL ESCURO ======= */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -172,7 +125,7 @@ li:hover{background:#f0f0f0;}
   to { transform: translateY(0); opacity: 1; }
 }
 
-/* 🔹 TELA BRANCA DE CONFIRMAÇÃO FINAL */
+/* ======= TELA BRANCA DE CONFIRMAÇÃO ======= */
 .checkin-overlay {
   position: fixed;
   inset: 0;
@@ -191,9 +144,6 @@ li:hover{background:#f0f0f0;}
   color: #8BD24D;
   margin-bottom: 0.5rem;
 }
-.confirmation-card p {
-  margin: 0.5rem 0;
-}
 .mesa-info {
   display: flex;
   align-items: center;
@@ -211,134 +161,155 @@ li:hover{background:#f0f0f0;}
   color: #8BD24D;
   font-weight: bold;
 }
-<script>
-// 🔹 ABRIR MODAL DE CONFIRMAÇÃO
-function openConfirmationModal(guest) {
-  selectedGuest = guest;
-  document.getElementById('modalMessage').textContent =
-    `Confirmar check-in de ${guest.nome}? Mesa ${guest.mesa}`;
-  document.getElementById('confirmationModal').classList.add('active');
-}
+</style>
+</head>
 
-// 🔹 CANCELAR CHECK-IN (fecha modal)
-function cancelCheckin() {
-  selectedGuest = null;
-  document.getElementById('confirmationModal').classList.remove('active');
-}
+<body>
+<header class="header">
+  <div class="header-container">
+    <img src="monograma.png" alt="Monograma" class="logo">
+    <div class="header-text">
+      <h1 class="couple-names">Jackeline e Samarthony</h1>
+      <p class="event-info">06/12/2025 • Du Eventos</p>
+    </div>
+  </div>
+</header>
 
-// 🔹 CONFIRMAR CHECK-IN
-async function confirmCheckin() {
-  if (!selectedGuest) return;
-  try {
-    const payload = {
-      action: 'checkin',
-      guestId: selectedGuest.id,
-      timestamp: new Date().toISOString()
-    };
-    const res = await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify(payload)
-    });
-    const data = await res.json();
-    if (data.sucesso) {
-      selectedGuest.status = 'confirmado';
-      updateGuestLists();
-      showCheckinConfirmation(selectedGuest);
-    } else {
-      alert(data.erro || 'Erro ao confirmar check-in.');
-    }
-  } catch (e) {
+<div class="max-w-xl mx-auto mt-6 bg-white p-6 rounded-xl shadow-md">
+  <input type="text" id="searchInput" placeholder="Digite nome, apelido ou telefone" onkeyup="searchGuest(event)">
+  <button class="button-green w-full mb-4" onclick="performSearch()">Buscar Convidado</button>
+  <button class="button-gray w-full mb-6" onclick="refreshData()">🔄 Atualizar Dados</button>
 
+  <h3 class="font-bold mt-4 mb-2">💚 Convidados (aguardando check-in)</h3>
+  <ul id="pendingList"></ul>
+
+  <h3 class="font-bold mt-4 mb-2">✅ Check-in Realizado</h3>
+  <ul id="confirmedList"></ul>
+</div>
+
+<!-- 🔹 MODAL DE CONFIRMAÇÃO -->
+<div id="confirmationModal" class="modal-overlay">
+  <div class="modal-box">
+    <p id="modalMessage" class="mb-4 font-semibold text-lg"></p>
+    <div class="flex justify-around gap-3">
+      <button class="button-green" onclick="confirmCheckin()">✅ Confirmar</button>
+      <button class="button-gray" onclick="cancelCheckin()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- 🔹 TELA DE CHECK-IN CONFIRMADO -->
+<div id="checkinConfirmation" class="checkin-overlay">
+  <div class="confirmation-card fade-in">
+    <h2>✅ Check-in realizado!</h2>
+    <p id="confirmedName" class="font-semibold text-lg mb-2"></p>
+    <div class="mesa-info">
+      <img src="mesa-icon.png" alt="Mesa" class="mesa-icon" />
+      <span id="confirmedTable" class="highlight"></span>
+    </div>
+    <button class="button-green mt-4" onclick="newSearch()">Novo Check-in</button>
+  </div>
+</div>
 
 <div class="footer">Criado por Katiene Barbosa</div>
 
 <script>
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwEfTr6QOye-tvdPbH36if2Fj5k_XhP5iy4oAteV8P28M5gzR3Wiqbqhp6W1EASESBc/exec';
-let guests=[], selectedGuest=null;
+let guests = [], selectedGuest = null;
 
+// 🔹 Carregar convidados
 async function loadGuestsFromSheets(){
-  try{
+  try {
     const res = await fetch(`${APPS_SCRIPT_URL}?action=getGuests`);
     const data = await res.json();
     console.log('🔍 Retorno GAS:', data);
     if(data.sucesso){
-      guests = data.convidados.map(g => ({...g, checkedIn: g.status==='confirmado'}));
+      guests = data.convidados.map(g => ({...g, checkedIn: g.status === 'confirmado'}));
       updateGuestLists();
     } else { alert('Erro: ' + data.erro); }
-  }catch(e){console.error(e); alert('Erro ao carregar convidados');}
+  } catch(e){ console.error(e); alert('Erro ao carregar convidados'); }
 }
 
+// 🔹 Atualizar listas
 function updateGuestLists(){
   const confirmed = document.getElementById('confirmedList');
   const pending = document.getElementById('pendingList');
-  confirmed.innerHTML=''; pending.innerHTML='';
-  guests.forEach(g=>{
+  confirmed.innerHTML = ''; pending.innerHTML = '';
+  guests.forEach(g => {
     const item = document.createElement('li');
-    item.innerHTML = `<strong>${g.nome}</strong>${g.apelido?' ('+g.apelido+')':''} - ${g.telefone} • <span class="highlight">${g.mesa}</span>`;
-    if(g.status==='confirmado'){ item.style.backgroundColor='#DFF5E0'; confirmed.appendChild(item); }
-    else { item.style.backgroundColor='#fff'; item.onclick=()=>openConfirmationModal(g); pending.appendChild(item); }
-  });
-}
-
-function normalize(str){ return str.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(); }
-
-function searchGuest(e){ if(e.key==='Enter') performSearch(); }
-
-function performSearch(){
-  const term = normalize(document.getElementById('searchInput').value);
-  if(!term){ updateGuestLists(); return; }
-  guests.forEach(g=>{
-    const allLists = document.querySelectorAll('#pendingList li, #confirmedList li');
-    allLists.forEach(li=>li.style.display='none');
-    if(normalize(g.nome).includes(term) || normalize(g.apelido).includes(term) || g.telefone.includes(term)){
-      const list = g.status==='confirmado'? document.getElementById('confirmedList') : document.getElementById('pendingList');
-      Array.from(list.children).forEach(li=>{ if(li.textContent.includes(g.nome)) li.style.display='block'; });
+    item.innerHTML = `<strong>${g.nome}</strong>${g.apelido ? ' ('+g.apelido+')' : ''} - ${g.telefone} • <span class="highlight">${g.mesa}</span>`;
+    if(g.status === 'confirmado'){
+      item.style.backgroundColor = '#DFF5E0';
+      confirmed.appendChild(item);
+    } else {
+      item.style.backgroundColor = '#fff';
+      item.onclick = () => openConfirmationModal(g);
+      pending.appendChild(item);
     }
   });
 }
 
-function openConfirmationModal(guest) {
-  selectedGuest = guest;
-  document.getElementById('modalMessage').textContent =
-    `Confirmar check-in de ${guest.nome}? Mesa ${guest.mesa}`;
-  document.getElementById('confirmationModal').classList.remove('hidden');
+// 🔹 Buscar convidado
+function normalize(str){ return str.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(); }
+function searchGuest(e){ if(e.key==='Enter') performSearch(); }
+function performSearch(){
+  const term = normalize(document.getElementById('searchInput').value);
+  const allLists = document.querySelectorAll('#pendingList li, #confirmedList li');
+  if(!term){ allLists.forEach(li=>li.style.display='block'); return; }
+  allLists.forEach(li=>li.style.display='none');
+  guests.forEach(g=>{
+    if(normalize(g.nome).includes(term) || normalize(g.apelido).includes(term) || g.telefone.includes(term)){
+      const list = g.status==='confirmado' ? document.getElementById('confirmedList') : document.getElementById('pendingList');
+      Array.from(list.children).forEach(li=>{
+        if(li.textContent.includes(g.nome)) li.style.display='block';
+      });
+    }
+  });
 }
 
-function cancelCheckin() {
-  selectedGuest = null;
-  document.getElementById('confirmationModal').classList.add('hidden');
+// 🔹 Modal
+function openConfirmationModal(guest){
+  selectedGuest = guest;
+  document.getElementById('modalMessage').textContent = `Confirmar check-in de ${guest.nome}? Mesa ${guest.mesa}`;
+  document.getElementById('confirmationModal').classList.add('active');
 }
-  
+function cancelCheckin(){
+  selectedGuest = null;
+  document.getElementById('confirmationModal').classList.remove('active');
+}
+
+// 🔹 Confirmar check-in
 async function confirmCheckin(){
   if(!selectedGuest) return;
-  try{
-    const payload={action:'checkin', guestId:selectedGuest.id, timestamp:new Date().toISOString()};
-    const res = await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify(payload)});
+  try {
+    const payload = { action:'checkin', guestId:selectedGuest.id, timestamp:new Date().toISOString() };
+    const res = await fetch(APPS_SCRIPT_URL, { method:'POST', body:JSON.stringify(payload) });
     const data = await res.json();
     if(data.sucesso){
-      selectedGuest.status='confirmado';
+      selectedGuest.status = 'confirmado';
       updateGuestLists();
       showCheckinConfirmation(selectedGuest);
     } else { alert(data.erro); }
-  }catch(e){ console.error(e); }
+  } catch(e){ console.error(e); alert('Erro ao confirmar check-in'); }
   cancelCheckin();
 }
 
-function showCheckinConfirmation(guest) {
-  document.getElementById('confirmationModal').classList.add('hidden');
+// 🔹 Tela branca de resumo
+function showCheckinConfirmation(guest){
+  document.getElementById('confirmationModal').classList.remove('active');
   document.getElementById('confirmedName').textContent = guest.nome;
   document.getElementById('confirmedTable').textContent = guest.mesa;
-  document.getElementById('checkinConfirmation').classList.remove('hidden');
+  document.getElementById('checkinConfirmation').classList.add('active');
 }
-
-function newSearch() {
+function newSearch(){
   selectedGuest = null;
-  document.getElementById('checkinConfirmation').classList.add('hidden');
+  document.getElementById('checkinConfirmation').classList.remove('active');
   document.getElementById('searchInput').value = '';
   updateGuestLists();
   document.getElementById('searchInput').focus();
 }
 
+// 🔹 Atualizar manualmente
 async function refreshData(){ await loadGuestsFromSheets(); alert('Dados atualizados!'); }
 
 loadGuestsFromSheets();
@@ -346,13 +317,3 @@ document.getElementById('searchInput').focus();
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
