@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Check-in - J & S</title>
+<title>Check-in - KB Cerimonial</title>
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
@@ -191,10 +191,10 @@ li.confirmado { background: #f2fdf2; color: #333; }
 <body>
 <header class="header">
   <div class="header-container">
-    <img src="monograma.png" alt="Monograma" class="logo">
+    <img src="monograma.png" alt="Monograma" class="logo" role="img" aria-label="Monograma de Jackeline e Samarthony">
     <div class="header-text">
-      <h1 class="couple-names">Jackeline e Samarthony</h1>
-      <p class="event-info">06/12/2025 • Du Eventos</p>
+      <h1 class="couple-names">Nome do seu evento</h1>
+      <p class="event-info">Data do evento • Local</p>
     </div>
   </div>
 </header>
@@ -233,7 +233,7 @@ li.confirmado { background: #f2fdf2; color: #333; }
   </div>
 </div>
 
-<div class="footer">Criado por Katiene Barbosa</div>
+<div class="footer">Criado por Katiene Barbosa 2025</div>
 
 <script>
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwEfTr6QOye-tvdPbH36if2Fj5k_XhP5iy4oAteV8P28M5gzR3Wiqbqhp6W1EASESBc/exec';
@@ -271,18 +271,22 @@ function updateGuestLists(){
 
 // Normalizar texto para busca
 function normalize(str){ return str.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(); }
-function searchGuest(e){ if(e.key==='Enter') performSearch(); }
+function searchGuest(e){ if(e.key === 'Enter') performSearch(); }
 
 // Função de busca
 function performSearch(){
-  const term = normalize(document.getElementById('searchInput').value);
+  const term = normalize(document.getElementById('searchInput').value.trim());
+  
+  if(term.length < 2){ // Validação de entrada
+    alert('Por favor, digite pelo menos 2 caracteres para buscar.');
+    return;
+  }
+
   const pendingList = document.getElementById('pendingList');
   const confirmedList = document.getElementById('confirmedList');
 
   pendingList.innerHTML = '';
   confirmedList.innerHTML = '';
-
-  if(!term){ updateGuestLists(); return; }
 
   const filteredGuests = guests.filter(g =>
     normalize(g.nome).includes(term) ||
@@ -293,7 +297,7 @@ function performSearch(){
   filteredGuests.forEach(g => {
     const item = document.createElement('li');
     item.innerHTML = `<strong>${g.nome}</strong>${g.apelido ? ' (' + g.apelido + ')' : ''} - ${g.telefone}`;
-    if(g.status==='confirmado'){
+    if(g.status === 'confirmado'){
       item.classList.add('confirmado');
       confirmedList.appendChild(item);
     } else {
@@ -355,7 +359,10 @@ function newSearch(){
 }
 
 // Atualizar dados manualmente
-async function refreshData(){ await loadGuestsFromSheets(); alert('Dados atualizados!'); }
+async function refreshData(){ 
+  await loadGuestsFromSheets(); 
+  alert('Dados atualizados!'); 
+}
 
 // Inicialização
 loadGuestsFromSheets();
